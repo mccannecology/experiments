@@ -7,6 +7,8 @@ library(plyr)
 ###################################### 
 # Importing & cleaning up data frame #
 ######################################
+# make sure you remove any empty header rows from the .csv file 
+
 data_area <- read.csv("multispecies_area.csv") # import area data 
 data_rgr <- read.csv("multispecies_rgr.csv") # import relative growth rate data 
 
@@ -16,11 +18,11 @@ data_rgr <- data_rgr[complete.cases(data_rgr),]
 data_area$id2 <- paste(data_area$id,data_area$species,sep="")
 data_rgr$id2 <- paste(data_rgr$id,data_rgr$species,sep="")
 
-data_area <- data_area[,-9]
-
 data_comp_rel <- data_area[,-8]
 data_comp_rel <- data_comp_rel[!(data_comp_rel$species == "TOT" | data_comp_rel$treatment=="LM" | data_comp_rel$treatment=="SP" | data_comp_rel$treatment=="WB"),]
 data_comp_rel$id2 <- paste(data_comp_rel$id,data_comp_rel$species,sep="")
+
+data_area <- data_area[,-9]
 
 summary(data_area)
 summary(data_rgr)
@@ -29,6 +31,12 @@ summary(data_comp_rel)
 ##################################
 # Plot raw rgr data through time #
 ##################################
+# black & white 
+rgr_plot_raw <- ggplot(data_rgr, aes(x=day,y=rgr,group=id2,shape=species)) + geom_line() + geom_point() 
+rgr_plot_raw <- rgr_plot_raw + facet_grid(nutrients ~ treatment)
+rgr_plot_raw 
+
+# colour
 rgr_plot_raw <- ggplot(data_rgr, aes(x=day,y=rgr,group=id2,colour=species)) + geom_line() + geom_point() 
 rgr_plot_raw <- rgr_plot_raw + facet_grid(nutrients ~ treatment)
 rgr_plot_raw 
@@ -36,6 +44,12 @@ rgr_plot_raw
 ###################################
 # Plot raw area data through time #
 ###################################
+# black & white 
+area_plot_raw <- ggplot(data_area, aes(x=day,y=area_mm2,group=id2,shape=species)) + geom_line() + geom_point() 
+area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
+area_plot_raw 
+
+# colour
 area_plot_raw <- ggplot(data_area, aes(x=day,y=area_mm2,group=id2,colour=species)) + geom_line() + geom_point() 
 area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
 area_plot_raw 
@@ -43,6 +57,12 @@ area_plot_raw
 #######################################
 # Plot raw % composition through time #
 #######################################
+# black & white 
+comp_rel_plot_raw <- ggplot(data_comp_rel, aes(x=day, y=comp_rel, group=id2, shape=species)) + geom_line() + geom_point(size=3)
+comp_rel_plot_raw <- comp_rel_plot_raw + facet_grid(nutrients ~ treatment)
+comp_rel_plot_raw
+
+# colour
 comp_rel_plot_raw <- ggplot(data_comp_rel, aes(x=day, y=comp_rel, group=id2, colour=species)) + geom_line() + geom_point()
 comp_rel_plot_raw <- comp_rel_plot_raw + facet_grid(nutrients ~ treatment)
 comp_rel_plot_raw
@@ -75,9 +95,43 @@ summary_data_rgr <- ddply(data_rgr, c("nutrients","treatment","species","day"), 
 
 colnames(summary_data_rgr)[6] <- "rgr"
 
+summary_data_rgr02 <- ddply(data_rgr, c("nutrients","treatment","species","id2"), summarise, 
+                          N = length(rgr),
+                          mean = mean(rgr),
+                          max = max(rgr),
+                          sd = sd(rgr),
+                          se = sd / sqrt(N) )
+
+summary_data_rgr02 <- subset(summary_data_rgr02, summary_data_rgr02$species != "TOT")
+
+summary_data_meanrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
+                            N = length(mean),
+                            mean2 = mean(mean),
+                            sd = sd(mean),
+                            se = sd / sqrt(N) )
+
+colnames(summary_data_meanrgr)[5] <- "average_RGR"
+
+
+summary_data_maxrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
+                              N = length(max),
+                              max2 = mean(max),
+                              sd = sd(max),
+                              se = sd / sqrt(N) )
+
+colnames(summary_data_maxrgr)[5] <- "maximum_RGR"
+
+
 ##############################
 # Plot mean rgr through time #
 ##############################
+# black & white 
+rgr_plot_avg <- ggplot(summary_data_rgr, aes(x=day, y=rgr,shape=species)) + geom_errorbar(aes(ymin=rgr-se, ymax=rgr+se), width=0.1)
+rgr_plot_avg <- rgr_plot_avg + geom_line() + geom_point(size=3)
+rgr_plot_avg <- rgr_plot_avg + facet_grid(nutrients ~ treatment)
+rgr_plot_avg
+
+# colour
 rgr_plot_avg <- ggplot(summary_data_rgr, aes(x=day, y=rgr,colour=species)) + geom_errorbar(aes(ymin=rgr-se, ymax=rgr+se), width=0.1)
 rgr_plot_avg <- rgr_plot_avg + geom_line() + geom_point()
 rgr_plot_avg <- rgr_plot_avg + facet_grid(nutrients ~ treatment)
@@ -86,16 +140,76 @@ rgr_plot_avg
 ###############################
 # Plot mean area through time #
 ###############################
-area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,colour=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
+# black & white 
+area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,shape=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
+area_plot_avg <- area_plot_avg + geom_line() + geom_point(size=3)
+area_plot_avg <- area_plot_avg + facet_grid(nutrients ~ treatment)
+area_plot_avg
+
+# colour
+area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,fill=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
 area_plot_avg <- area_plot_avg + geom_line() + geom_point()
 area_plot_avg <- area_plot_avg + facet_grid(nutrients ~ treatment)
 area_plot_avg
 
+
 ########################################
 # Plot mean % composition through time #
 ########################################
-comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, colour=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
-comp_rel_plot <- comp_rel_plot + geom_line() + geom_point()
+# black & white 
+comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, shape=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- comp_rel_plot + geom_line() + geom_point(size=3)
 comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
+comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
 comp_rel_plot
 
+# colour
+comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, fill=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- comp_rel_plot + geom_line() + geom_point()
+comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
+comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
+comp_rel_plot
+
+#################################################################
+# Plot average maximum growth rate - by species - by treamtment #
+#################################################################
+# black & white 
+limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
+dodge <- position_dodge(width=0.9)
+maxrgr_plot <- ggplot(summary_data_maxrgr, aes(x=species, y=maximum_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+maxrgr_plot <- maxrgr_plot + facet_grid(nutrients ~ treatment)
+maxrgr_plot <- maxrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot <- maxrgr_plot + ylab("maximum RGR")
+maxrgr_plot <- maxrgr_plot + scale_fill_grey()
+maxrgr_plot
+
+# colour
+limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
+dodge <- position_dodge(width=0.9)
+maxrgr_plot <- ggplot(summary_data_maxrgr, aes(x=species, y=maximum_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+maxrgr_plot <- maxrgr_plot + facet_grid(nutrients ~ treatment)
+maxrgr_plot <- maxrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot <- maxrgr_plot + ylab("maximum RGR")
+maxrgr_plot
+
+################################################################
+# Plot average average growth rate - by species - by treatment #
+################################################################
+# black & white 
+limits <- aes(ymax = average_RGR + se, ymin= average_RGR - se)
+dodge <- position_dodge(width=0.9)
+avgrgr_plot <- ggplot(summary_data_meanrgr, aes(x=species, y=average_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment)
+avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot <- avgrgr_plot + ylab("average RGR")
+avgrgr_plot <- avgrgr_plot + scale_fill_grey() 
+avgrgr_plot
+
+# colour
+limits <- aes(ymax = average_RGR + se, ymin= average_RGR - se)
+dodge <- position_dodge(width=0.9)
+avgrgr_plot <- ggplot(summary_data_meanrgr, aes(x=species, y=average_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment)
+avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot <- avgrgr_plot + ylab("average RGR")
+avgrgr_plot
