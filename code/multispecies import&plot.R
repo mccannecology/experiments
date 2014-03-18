@@ -20,11 +20,12 @@ data_rgr <- data_rgr[complete.cases(data_rgr),]
 data_area$id2 <- paste(data_area$id,data_area$species,sep="")
 data_rgr$id2 <- paste(data_rgr$id,data_rgr$species,sep="")
 
-data_comp_rel <- data_area[,-8]
-data_comp_rel <- data_comp_rel[!(data_comp_rel$species == "TOT" | data_comp_rel$treatment=="LM" | data_comp_rel$treatment=="SP" | data_comp_rel$treatment=="WB"),]
-data_comp_rel$id2 <- paste(data_comp_rel$id,data_comp_rel$species,sep="")
+data_comp_rel <- data_area[,-8] # remove area_mm2 
+data_comp_rel <- data_area[,-9] # remove area_stand 
+data_comp_rel <- data_comp_rel[!(data_comp_rel$species == "TOT"),] # remove the total - will always be 100 
+data_comp_rel <- data_comp_rel[!(data_comp_rel$treatment=="LM" | data_comp_rel$treatment=="SP" | data_comp_rel$treatment=="WB"),] # remove monocultures - will always be 100 
 
-data_area <- data_area[,-9]
+data_area <- data_area[,-10] # remove comp_rel from data_area
 
 summary(data_area)
 summary(data_rgr)
