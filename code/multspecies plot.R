@@ -204,6 +204,13 @@ avgrgr_plot
 ##################################
 # Plot species area on each axis #
 ##################################
+# Lemna & Spirodela - w/ unqie axis scales for each facet & a line at slope=1, intercetp=0
+area_area_LMSP_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMSP"), aes(x=LM,y=SP,group=id)) + geom_point() + geom_line()
+area_area_LMSP_plot <- area_area_LMSP_plot + facet_grid(.~nutrients, scales="free")
+area_area_LMSP_plot <- area_area_LMSP_plot + xlab("area LM (sq.mm)") + ylab("area SP (sq.mm)")
+area_area_LMSP_plot <- area_area_LMSP_plot + geom_abline(intercept=0,slope=1,colour="red",linetype="dashed")
+area_area_LMSP_plot
+
 # Lemna & Spirodela 
 area_area_LMSP_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMSP"), aes(x=LM,y=SP,group=id)) + geom_point() + geom_line()
 area_area_LMSP_plot <- area_area_LMSP_plot + facet_grid(.~nutrients)
@@ -215,6 +222,13 @@ area_area_LMSP_plot_low <- ggplot(subset(data_area_area, data_area_area$treatmen
 area_area_LMSP_plot_low <- area_area_LMSP_plot_low + geom_point() + geom_line()
 area_area_LMSP_plot_low <- area_area_LMSP_plot_low + xlab("area LM (sq.mm)") + ylab("area SP (sq.mm)")
 area_area_LMSP_plot_low
+
+# Lemna & Wolffia - w/ unqie axis scales for each facet & a line at slope=1, intercetp=0
+area_area_LMWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMWB"), aes(x=LM,y=WB,group=id)) + geom_point() + geom_line()
+area_area_LMWB_plot <- area_area_LMWB_plot + facet_grid(.~nutrients, scales="free")
+area_area_LMWB_plot <- area_area_LMWB_plot + xlab("area LM (sq.mm)") + ylab("area WB (sq.mm)")
+area_area_LMWB_plot <- area_area_LMWB_plot + geom_abline(intercept=0,slope=1,colour="red",linetype="dashed")
+area_area_LMWB_plot
 
 # Lemna & Wolffia 
 area_area_LMWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMWB"), aes(x=LM,y=WB,group=id)) + geom_point() + geom_line()
@@ -228,6 +242,13 @@ area_area_LMWB_plot_low <- area_area_LMWB_plot_low + geom_point() + geom_line()
 area_area_LMWB_plot_low <- area_area_LMWB_plot_low + xlab("area LM (sq.mm)") + ylab("area WB (sq.mm)")
 area_area_LMWB_plot_low
 
+# Spirodela & Wolffia - w/ unqie axis scales for each facet & a line at slope=1, intercetp=0 
+area_area_SPWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="SPWB"), aes(x=SP,y=WB,group=id)) + geom_point() + geom_line()
+area_area_SPWB_plot <- area_area_SPWB_plot + facet_grid(.~nutrients, scales="free")
+area_area_SPWB_plot <- area_area_SPWB_plot + xlab("area SP (sq.mm)") + ylab("area WB (sq.mm)")
+area_area_SPWB_plot <- area_area_SPWB_plot + geom_abline(intercept=0,slope=1,colour="red",linetype="dashed")
+area_area_SPWB_plot 
+
 # Spirodela & Wolffia 
 area_area_SPWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="SPWB"), aes(x=SP,y=WB,group=id)) + geom_point() + geom_line()
 area_area_SPWB_plot <- area_area_SPWB_plot + facet_grid(.~nutrients)
@@ -239,6 +260,14 @@ area_area_SPWB_plot_low <- ggplot(subset(data_area_area, data_area_area$treatmen
 area_area_SPWB_plot_low <- area_area_SPWB_plot_low + geom_point() + geom_line()
 area_area_SPWB_plot_low <- area_area_SPWB_plot_low + xlab("area SP (sq.mm)") + ylab("area WB (sq.mm)")
 area_area_SPWB_plot_low
+
+# Lemna & Spirodela & Wolffia - w/ unqie axis scales for each facet & a line at slope=1, intercetp=0  
+# use color to display 3rd variable - WB
+area_area_LMSPWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMSPWB"), aes(x=LM,y=SP,group=id,colour=WB)) + geom_point() + geom_line()
+area_area_LMSPWB_plot <- area_area_LMSPWB_plot + facet_grid(.~nutrients, scales="free")
+area_area_LMSPWB_plot <- area_area_LMSPWB_plot + xlab("area LM (sq.mm)") + ylab("area SP (sq.mm)")
+area_area_LMSPWB_plot <- area_area_LMSPWB_plot + geom_abline(intercept=0,slope=1,colour="red",linetype="dashed")
+area_area_LMSPWB_plot
 
 # Lemna & Spirodela & Wolffia 
 # use color to display 3rd variable - WB
