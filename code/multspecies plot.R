@@ -58,13 +58,13 @@ area_stand_plot_raw
 # Plot raw % composition through time #
 #######################################
 # black & white 
-comp_rel_plot_raw <- ggplot(data_comp_rel, aes(x=day, y=comp_rel, group=id2, shape=species)) + geom_line() + geom_point(size=3)
+comp_rel_plot_raw <- ggplot(data_area, aes(x=day, y=comp_rel, group=id2, shape=species)) + geom_line() + geom_point(size=3)
 comp_rel_plot_raw <- comp_rel_plot_raw + facet_grid(nutrients ~ treatment)
 comp_rel_plot_raw <- comp_rel_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
 comp_rel_plot_raw
 
 # colour
-comp_rel_plot_raw <- ggplot(data_comp_rel, aes(x=day, y=comp_rel, group=id2, colour=species)) + geom_line() + geom_point()
+comp_rel_plot_raw <- ggplot(data_area, aes(x=day, y=comp_rel, group=id2, colour=species)) + geom_line() + geom_point()
 comp_rel_plot_raw <- comp_rel_plot_raw + facet_grid(nutrients ~ treatment)
 comp_rel_plot_raw <- comp_rel_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
 comp_rel_plot_raw
@@ -121,7 +121,7 @@ area_stand_plot_avg
 # Plot mean % composition through time #
 ########################################
 # black & white 
-comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, shape=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- ggplot(summary_data_area, aes(x=day, y=comp_rel, shape=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
 comp_rel_plot <- comp_rel_plot + geom_line() + geom_point(size=3)
 comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
 comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
@@ -129,7 +129,7 @@ comp_rel_plot <- comp_rel_plot + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=
 comp_rel_plot
 
 # colour
-comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, colour=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- ggplot(summary_data_area, aes(x=day, y=comp_rel, colour=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
 comp_rel_plot <- comp_rel_plot + geom_line() + geom_point()
 comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
 comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
