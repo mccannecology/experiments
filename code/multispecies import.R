@@ -2,7 +2,8 @@
 # Analysis of multispecies duckweed experiment #
 #                                              #
 # Importing data                               #
-# Attempting to do all calculations with R     #
+# Do all calculations with R                   #
+# Reads "multispecies_area_raw.csv"            #
 ################################################
 library(plyr)
 
