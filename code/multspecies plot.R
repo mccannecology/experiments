@@ -88,6 +88,15 @@ rgr_plot_avg <- rgr_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3
 rgr_plot_avg <- rgr_plot_avg + ylab("RGR")
 rgr_plot_avg
 
+# colour w/ unqie y-axis scales for each facet 
+rgr_plot_avg <- ggplot(summary_data_rgr, aes(x=day, y=rgr,colour=species)) + geom_errorbar(aes(ymin=rgr-se, ymax=rgr+se), width=0.1)
+rgr_plot_avg <- rgr_plot_avg + geom_line() + geom_point()
+rgr_plot_avg <- rgr_plot_avg + facet_grid(nutrients ~ treatment, scales="free_y")
+rgr_plot_avg <- rgr_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3,5,7,9))
+rgr_plot_avg <- rgr_plot_avg + ylab("RGR")
+rgr_plot_avg
+
+
 ###############################
 # Plot mean area through time #
 ###############################
@@ -107,9 +116,21 @@ area_plot_avg <- area_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=
 area_plot_avg <- area_plot_avg + ylab("area (sq. mm)")
 area_plot_avg
 
+# colour w/ unqie y-axis scales for each facet 
+area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,colour=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
+area_plot_avg <- area_plot_avg + geom_line() + geom_point()
+area_plot_avg <- area_plot_avg + facet_grid(nutrients ~ treatment, scales="free_y")
+area_plot_avg <- area_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_plot_avg <- area_plot_avg + ylab("area (sq. mm)")
+area_plot_avg
+
 #####################################
 # Plot mean area_stand through time #
 #####################################
+# black & white 
+# still need to add 
+
+# colour
 area_stand_plot_avg <- ggplot(summary_data_area_stand, aes(x=day, y=area_stand,colour=species)) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
 area_stand_plot_avg <- area_stand_plot_avg + geom_line() + geom_point()
 area_stand_plot_avg <- area_stand_plot_avg + facet_grid(nutrients ~ treatment)
@@ -121,7 +142,7 @@ area_stand_plot_avg
 # Plot mean % composition through time #
 ########################################
 # black & white 
-comp_rel_plot <- ggplot(summary_data_area, aes(x=day, y=comp_rel, shape=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, shape=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
 comp_rel_plot <- comp_rel_plot + geom_line() + geom_point(size=3)
 comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
 comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
@@ -129,7 +150,7 @@ comp_rel_plot <- comp_rel_plot + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=
 comp_rel_plot
 
 # colour
-comp_rel_plot <- ggplot(summary_data_area, aes(x=day, y=comp_rel, colour=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
+comp_rel_plot <- ggplot(summary_data_comp_rel, aes(x=day, y=comp_rel, colour=species)) + geom_errorbar(aes(ymin=comp_rel-se, ymax=comp_rel+se), width=0.1)
 comp_rel_plot <- comp_rel_plot + geom_line() + geom_point()
 comp_rel_plot <- comp_rel_plot + facet_grid(nutrients ~ treatment)
 comp_rel_plot <- comp_rel_plot + ylab("relative % composition")
@@ -220,12 +241,14 @@ area_area_SPWB_plot_low <- area_area_SPWB_plot_low + xlab("area SP (sq.mm)") + y
 area_area_SPWB_plot_low
 
 # Lemna & Spirodela & Wolffia 
+# use color to display 3rd variable - WB
 area_area_LMSPWB_plot <- ggplot(subset(data_area_area, data_area_area$treatment=="LMSPWB"), aes(x=LM,y=SP,group=id,colour=WB)) + geom_point() + geom_line()
 area_area_LMSPWB_plot <- area_area_LMSPWB_plot + facet_grid(.~nutrients)
 area_area_LMSPWB_plot <- area_area_LMSPWB_plot + xlab("area LM (sq.mm)") + ylab("area SP (sq.mm)")
 area_area_LMSPWB_plot
 
 # Lemna & Spirodela & Wolffia - just low nutrients 
+# use color to display 3rd variable - WB
 area_area_LMSPWB_plot_low <- ggplot(subset(data_area_area, data_area_area$treatment=="LMSPWB"& data_area_area$nutrients=="low"), aes(x=LM,y=SP,group=id,colour=WB)) 
 area_area_LMSPWB_plot_low <- area_area_LMSPWB_plot_low + geom_point() + geom_line()
 area_area_LMSPWB_plot_low <- area_area_LMSPWB_plot_low + facet_grid(.~nutrients)
