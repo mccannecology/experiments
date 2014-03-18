@@ -49,7 +49,7 @@ summary_data_area_stand <- ddply(data_area, c("nutrients","treatment","species",
                            mean = mean(area_stand),
                            sd = sd(area_stand),
                            se = sd / sqrt(N) )
-colnames(summary_data_area)[6] <- "area_stand"
+colnames(summary_data_area_stand)[6] <- "area_stand"
 
 # Relative % composition
 summary_data_comp_rel <- ddply(data_comp_rel, c("nutrients","treatment","species","day"), summarise, 

@@ -92,6 +92,15 @@ area_plot_avg <- area_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=
 area_plot_avg <- area_plot_avg + ylab("area (sq. mm)")
 area_plot_avg
 
+#####################################
+# Plot mean area_stand through time #
+#####################################
+area_stand_plot_avg <- ggplot(summary_data_area_stand, aes(x=day, y=area_stand,colour=species)) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
+area_stand_plot_avg <- area_stand_plot_avg + geom_line() + geom_point()
+area_stand_plot_avg <- area_stand_plot_avg + facet_grid(nutrients ~ treatment)
+area_stand_plot_avg <- area_stand_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_stand_plot_avg <- area_stand_plot_avg + ylab("current area / initial area")
+area_stand_plot_avg
 
 ########################################
 # Plot mean % composition through time #
