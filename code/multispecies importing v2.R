@@ -54,6 +54,7 @@ row.names(data_area) <- seq(nrow(data_area)) # Re-name the rows so they're not s
 # add standardized area 
 initial <- subset(data_area$area_mm2,data_area$day == 0) # creates a vector of initial areas 
 data_area$area_stand <- data_area$area_mm2 / initial # divide area_mm2 by that initial area & create a new variable
+rm(initial) # cleanup your environment
 
 # calculate rgr 
 rgr1 <- (log(subset(data_area$area_mm2,data_area$day==2))-log(subset(data_area$area_mm2,data_area$day==0)))/2
@@ -74,6 +75,9 @@ data_rgr <- data_rgr[-8]
 
 # add the rgr vector the the data frame 
 data_rgr$rgr <- rgr
+
+# cleanup your environment
+rm(list = c("rgr","rgr1","rgr3","rgr5","rgr7","rgr9"))
 
 # add a second id that is specific to a species in the well 
 data_area$id2 <- paste(data_area$id,data_area$species,sep="")
