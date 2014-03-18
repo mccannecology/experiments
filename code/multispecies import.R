@@ -35,55 +35,61 @@ summary(data_comp_rel)
 # Means and variances #
 # Use for plotting    #
 #######################
+# Area
 summary_data_area <- ddply(data_area, c("nutrients","treatment","species","day"), summarise, 
                            N = length(area_mm2),
                            mean = mean(area_mm2),
                            sd = sd(area_mm2),
                            se = sd / sqrt(N) )
-
 colnames(summary_data_area)[6] <- "area"
 
+# Standardized area (Current/Initial)
+summary_data_area_stand <- ddply(data_area, c("nutrients","treatment","species","day"), summarise, 
+                           N = length(area_stand),
+                           mean = mean(area_stand),
+                           sd = sd(area_stand),
+                           se = sd / sqrt(N) )
+colnames(summary_data_area)[6] <- "area_stand"
+
+# Relative % composition
 summary_data_comp_rel <- ddply(data_comp_rel, c("nutrients","treatment","species","day"), summarise, 
                            N = length(comp_rel),
                            mean = mean(comp_rel),
                            sd = sd(comp_rel),
                            se = sd / sqrt(N) )
-
 colnames(summary_data_comp_rel)[6] <- "comp_rel"
 
-
+# Relative growth rate 
 summary_data_rgr <- ddply(data_rgr, c("nutrients","treatment","species","day"), summarise, 
                           N = length(rgr),
                           mean = mean(rgr),
                           sd = sd(rgr),
                           se = sd / sqrt(N) )
-
 colnames(summary_data_rgr)[6] <- "rgr"
 
+# Relative growth rate - same as above, but organized by each species in each well and finds the maximum too 
 summary_data_rgr02 <- ddply(data_rgr, c("nutrients","treatment","species","id2"), summarise, 
                           N = length(rgr),
                           mean = mean(rgr),
                           max = max(rgr),
                           sd = sd(rgr),
                           se = sd / sqrt(N) )
-
 summary_data_rgr02 <- subset(summary_data_rgr02, summary_data_rgr02$species != "TOT")
 
+# Relative growth rate - takes the mean of the mean growth rates by species in each well 
 summary_data_meanrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
                             N = length(mean),
                             mean2 = mean(mean),
                             sd = sd(mean),
                             se = sd / sqrt(N) )
-
 colnames(summary_data_meanrgr)[5] <- "average_RGR"
 
-
+# Relative growth rate - the mean of the maximum growth rates by species in each well 
 summary_data_maxrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
                               N = length(max),
                               max2 = mean(max),
                               sd = sd(max),
                               se = sd / sqrt(N) )
-
 colnames(summary_data_maxrgr)[5] <- "maximum_RGR"
 
 
