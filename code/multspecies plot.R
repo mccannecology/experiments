@@ -39,6 +39,21 @@ area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
 area_plot_raw <- area_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
 area_plot_raw 
 
+#########################################
+# Plot raw area_stand data through time #
+#########################################
+# black & white 
+area_stand_plot_raw <- ggplot(data_area, aes(x=day,y=area_stand,group=id2,shape=species)) + geom_line() + geom_point() 
+area_stand_plot_raw <- area_stand_plot_raw + facet_grid(nutrients ~ treatment)
+area_stand_plot_raw <- area_stand_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_stand_plot_raw 
+
+# colour
+area_stand_plot_raw <- ggplot(data_area, aes(x=day,y=area_stand,group=id2,colour=species)) + geom_line() + geom_point() 
+area_stand_plot_raw <- area_stand_plot_raw + facet_grid(nutrients ~ treatment)
+area_stand_plot_raw <- area_stand_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_stand_plot_raw 
+
 #######################################
 # Plot raw % composition through time #
 #######################################
