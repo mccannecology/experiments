@@ -2,7 +2,10 @@
 # Analysis of multispecies duckweed experiment #
 #                                              #
 # Importing data                               #
-# Attempint to do all calculations with R      #
+# Attempting to do all calculations with R     #
+################################################
+library(plyr)
+
 ################################################
 data_area_raw <- read.csv("multispecies_area_raw.csv") # import area data 
 
@@ -72,10 +75,9 @@ data_rgr <- data_rgr[-8]
 # add the rgr vector the the data frame 
 data_rgr$rgr <- rgr
 
-# overwrite the dataframes that I made in "multispecies import.R" 
-data_area <- data_area
-data_area_area <- data_area_area
-data_rgr <- data_rgr 
+# add a second id that is specific to a species in the well 
+data_area$id2 <- paste(data_area$id,data_area$species,sep="")
+data_rgr$id2 <- paste(data_rgr$id,data_rgr$species,sep="")
 
 #######################
 # Means and variances #
