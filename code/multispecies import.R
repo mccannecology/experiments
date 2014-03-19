@@ -67,19 +67,35 @@ rgr9 <- (log(subset(data_area$area_mm2,data_area$day==10))-log(subset(data_area$
 # combine each day's rgr into a single vector
 rgr <- c(rgr1,rgr3,rgr5,rgr7,rgr9)
 
-# calculate density-standarized rgr
+# Calculate density-standardized RGR
+# make a temporary data frame with all rows with species = TOT 
+temptotals <- subset(data_area,data_area$species=="TOT")
+temptotals <- temptotals[,c("id","day","area_mm2")]
+colnames(temptotals)[3] <- "area_total"
+temptotals
+                 
+# merge the temporary data frame holding your total areas with the original data_area data frame 
+data_area <- merge(data_area,temptotals,by=c("id","day"))
+
+# clean up 
+data_area <- data_area[with(data_area, order(day,id)),] # re-order - by id and day
+row.names(data_area) <- seq(nrow(data_area)) # Re-name the rows so they're not so ugly
+
+# clean up your environment
+rm(temptotals)
 
 # total area of a well plate
 diameter <- 35 
 wellarea <- pi*(diameter/2)^2
 
-# this standardized by the density of that particular species in the previous time step
-# I need to standardize by the density of all species in the well 
-rgr1_stand <- rgr1/(subset(data_area$area_mm2,data_area$day==0)/wellarea)
-rgr3_stand <- rgr3/(subset(data_area$area_mm2,data_area$day==2)/wellarea)
-rgr5_stand <- rgr5/(subset(data_area$area_mm2,data_area$day==4)/wellarea)
-rgr7_stand <- rgr7/(subset(data_area$area_mm2,data_area$day==6)/wellarea)
-rgr9_stand <- rgr9/(subset(data_area$area_mm2,data_area$day==8)/wellarea)
+# this standardized by the density of all species in the previous time step
+# I'm not sure if this standardization makes any sense at all 
+# currently, if you have high RGR and high density you get a smaller # than if you have the same RGR and low density -- this seems wrong!
+rgr1_stand <- rgr1/(subset(data_area$area_total,data_area$day==0)/wellarea)
+rgr3_stand <- rgr3/(subset(data_area$area_total,data_area$day==2)/wellarea)
+rgr5_stand <- rgr5/(subset(data_area$area_total,data_area$day==4)/wellarea)
+rgr7_stand <- rgr7/(subset(data_area$area_total,data_area$day==6)/wellarea)
+rgr9_stand <- rgr9/(subset(data_area$area_total,data_area$day==8)/wellarea)
 
 # combine each day's density-standarized rgr into a single vector
 rgr_stand  <- c(rgr1_stand,rgr3_stand,rgr5_stand,rgr7_stand,rgr9_stand)
@@ -87,7 +103,8 @@ rgr_stand  <- c(rgr1_stand,rgr3_stand,rgr5_stand,rgr7_stand,rgr9_stand)
 # set-up the dataframe to hold the rgrs
 data_rgr <- subset(data_area, data_area$day != 10) # exclude day 10
 data_rgr$day <- data_rgr$day+1 # add one to day so it corresponds to the midpoint for RGR calculations 
-data_rgr <- data_rgr[-10] # get rid of columns you don't need 
+data_rgr <- data_rgr[-11] # get rid of columns you don't need 
+data_rgr <- data_rgr[-10]
 data_rgr <- data_rgr[-9]
 data_rgr <- data_rgr[-8]
 

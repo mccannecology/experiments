@@ -99,6 +99,9 @@ rgr_plot_avg
 ####################################
 # Plot mean rgr_stand through time #
 ####################################
+# this response variable may be DUMB
+# why should I divided RGR by density on previous time step??? 
+
 # black & white 
 rgr_stand_plot_avg <- ggplot(summary_data_rgr_stand, aes(x=day, y=rgr_stand,shape=species)) + geom_errorbar(aes(ymin=rgr_stand-se, rgr_stand=rgr+se), width=0.1)
 rgr_stand_plot_avg <- rgr_stand_plot_avg + geom_line() + geom_point(size=3)
