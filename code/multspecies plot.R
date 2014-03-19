@@ -96,6 +96,32 @@ rgr_plot_avg <- rgr_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3
 rgr_plot_avg <- rgr_plot_avg + ylab("RGR")
 rgr_plot_avg
 
+####################################
+# Plot mean rgr_stand through time #
+####################################
+# black & white 
+rgr_stand_plot_avg <- ggplot(summary_data_rgr_stand, aes(x=day, y=rgr_stand,shape=species)) + geom_errorbar(aes(ymin=rgr_stand-se, rgr_stand=rgr+se), width=0.1)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + geom_line() + geom_point(size=3)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + facet_grid(nutrients ~ treatment)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3,5,7,9))
+rgr_stand_plot_avg <- rgr_stand_plot_avg + ylab("RGR / density ")
+rgr_stand_plot_avg
+
+# colour
+rgr_stand_plot_avg <- ggplot(summary_data_rgr_stand, aes(x=day, y=rgr_stand,colour=species)) + geom_errorbar(aes(ymin=rgr_stand-se, ymax=rgr_stand+se), width=0.1)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + geom_line() + geom_point()
+rgr_stand_plot_avg <- rgr_stand_plot_avg + facet_grid(nutrients ~ treatment)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3,5,7,9))
+rgr_stand_plot_avg <- rgr_stand_plot_avg + ylab("RGR / density ")
+rgr_stand_plot_avg
+
+# colour w/ unqie y-axis scales for each facet 
+rgr_stand_plot_avg <- ggplot(summary_data_rgr_stand, aes(x=day, y=rgr_stand,colour=species)) + geom_errorbar(aes(ymin=rgr_stand-se, ymax=rgr_stand+se), width=0.1)
+rgr_stand_plot_avg <- rgr_stand_plot_avg + geom_line() + geom_point()
+rgr_stand_plot_avg <- rgr_stand_plot_avg + facet_grid(nutrients ~ treatment, scales="free_y")
+rgr_stand_plot_avg <- rgr_stand_plot_avg + scale_x_discrete(breaks=c(1,3,5,7,9),labels=c(1,3,5,7,9))
+rgr_stand_plot_avg <- rgr_stand_plot_avg + ylab("RGR / density ")
+rgr_stand_plot_avg
 
 ###############################
 # Plot mean area through time #
