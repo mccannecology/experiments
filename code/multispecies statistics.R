@@ -18,7 +18,6 @@ for (i in 1:length(nutrients)){
   }
 }
 
-
 # QQ plots
 
 # Shapiro-Wilk test - assess normality 
@@ -30,9 +29,23 @@ for (i in 1:length(nutrients)){
 # Bartlett Test of Homogeneity of Variances - within each treatment group 
 # null hypothesis = population variances are equal 
 
-# Response: Area 
-# Is final (day 10) standardized area different between species*nutrient treatments? (ANOVA)
-# Is final (day 10) standardized area different between species richnesses? (harder to do this - how do I group? average?)
+##############################
+# Two-way anova              #
+# Y= total standardized area #
+# Nutrients * sp. treatment  #
+##############################
+
+# subset your data first 
+data_area_10 <- subset(data_area, data_area$day == 10)
+data_area_10_TOT <- subset(data_area_10, data_area_10$species == "TOT")
+
+anova_area_stand_10_TOT <- aov(area_stand ~ nutrients * treatment, data=data_area_10_TOT)
+summary(anova_area_stand_10_TOT)
+posthoc_anova_area_stand_10_TOT <- TukeyHSD(anova_area_stand_10_TOT)
+posthoc_anova_area_stand_10_TOT <- posthoc_anova_area_stand_10_TOT$'nutrients:treatment'
+significant <- subset(posthoc_anova_area_stand_10_TOT, posthoc_anova_area_stand_10_TOT[,4]<=0.050) # significant comparisons 
+nonsignif <- subset(posthoc_anova_area_stand_10_TOT, posthoc_anova_area_stand_10_TOT[,4]>0.050) # non-significant comparisons 
+
 
 # Response: Relative growth rates 
 # Within each species, is average average RGR different betweeen species*nutrient treatments? (ANOVA)
