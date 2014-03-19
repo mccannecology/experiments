@@ -7,8 +7,17 @@
 ###############################
 # Test parametric assumptions #
 ###############################
-# plot daa 
-# e.g., hist(subset(data_area$area_stand, data_area$day == 10 & data_area$nutrients == "low"))
+nutrients<-c("low","high")
+treatment<-c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB")
+
+HIST<-list()
+# plot data by treatment combinations 
+for (i in 1:length(nutrients)){
+  for (j in 1:length(treatment)){
+    HIST[i*j]<-hist(subset(data_area$area_stand, data_area$day == 10 & data_area$nutrients == nutrients[i] & data_area$treatment ==  treatment[j] & data_area$species == "TOT"),main=paste(nutrients[i],treatment[j]))
+  }
+}
+
 
 # QQ plots
 
