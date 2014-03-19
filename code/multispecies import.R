@@ -166,4 +166,4 @@ summary_data_rgr_stand <- ddply(data_rgr, c("nutrients","treatment","species","d
                           mean = mean(rgr_stand),
                           sd = sd(rgr_stand),
                           se = sd / sqrt(N) )
-colnames(summary_data_rgr)[6] <- "rgr_stand"
+colnames(summary_data_rgr_stand)[6] <- "rgr_stand"
