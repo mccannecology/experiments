@@ -67,16 +67,19 @@ rgr9 <- (log(subset(data_area$area_mm2,data_area$day==10))-log(subset(data_area$
 # combine each day's rgr into a single vector
 rgr <- c(rgr1,rgr3,rgr5,rgr7,rgr9)
 
+# calculate density-standarized rgr
+
 # total area of a well plate
 diameter <- 35 
 wellarea <- pi*(diameter/2)^2
 
-# calculate density-standarized rgr 
-rgr1_stand <- (log(subset(data_area$area_mm2,data_area$day==2))-log(subset(data_area$area_mm2,data_area$day==0)))/2/(subset(data_area$area_mm2,data_area$day==0)/wellarea)
-rgr3_stand <- (log(subset(data_area$area_mm2,data_area$day==4))-log(subset(data_area$area_mm2,data_area$day==2)))/2/(subset(data_area$area_mm2,data_area$day==2)/wellarea)
-rgr5_stand <- (log(subset(data_area$area_mm2,data_area$day==6))-log(subset(data_area$area_mm2,data_area$day==4)))/2/(subset(data_area$area_mm2,data_area$day==4)/wellarea)
-rgr7_stand <- (log(subset(data_area$area_mm2,data_area$day==8))-log(subset(data_area$area_mm2,data_area$day==6)))/2/(subset(data_area$area_mm2,data_area$day==6)/wellarea)
-rgr9_stand <- (log(subset(data_area$area_mm2,data_area$day==10))-log(subset(data_area$area_mm2,data_area$day==8)))/2/(subset(data_area$area_mm2,data_area$day==8)/wellarea)
+# this standardized by the density of that particular species in the previous time step
+# I need to standardize by the density of all species in the well 
+rgr1_stand <- rgr1/(subset(data_area$area_mm2,data_area$day==0)/wellarea)
+rgr3_stand <- rgr3/(subset(data_area$area_mm2,data_area$day==2)/wellarea)
+rgr5_stand <- rgr5/(subset(data_area$area_mm2,data_area$day==4)/wellarea)
+rgr7_stand <- rgr7/(subset(data_area$area_mm2,data_area$day==6)/wellarea)
+rgr9_stand <- rgr9/(subset(data_area$area_mm2,data_area$day==8)/wellarea)
 
 # combine each day's density-standarized rgr into a single vector
 rgr_stand  <- c(rgr1_stand,rgr3_stand,rgr5_stand,rgr7_stand,rgr9_stand)
