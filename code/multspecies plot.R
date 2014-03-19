@@ -31,12 +31,14 @@ rgr_plot_raw
 area_plot_raw <- ggplot(data_area, aes(x=day,y=area_mm2,group=id2,shape=species)) + geom_line() + geom_point() 
 area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
 area_plot_raw <- area_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_plot_raw <- area_plot_raw + ylab("area (sq. mm")
 area_plot_raw 
 
 # colour
 area_plot_raw <- ggplot(data_area, aes(x=day,y=area_mm2,group=id2,colour=species)) + geom_line() + geom_point() 
 area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
 area_plot_raw <- area_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_plot_raw <- area_plot_raw + ylab("area (sq. mm")
 area_plot_raw 
 
 #########################################
@@ -46,12 +48,14 @@ area_plot_raw
 area_stand_plot_raw <- ggplot(data_area, aes(x=day,y=area_stand,group=id2,shape=species)) + geom_line() + geom_point() 
 area_stand_plot_raw <- area_stand_plot_raw + facet_grid(nutrients ~ treatment)
 area_stand_plot_raw <- area_stand_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_stand_plot_raw <- area_stand_plot_raw + ylab("current area / initial area")
 area_stand_plot_raw 
 
 # colour
 area_stand_plot_raw <- ggplot(data_area, aes(x=day,y=area_stand,group=id2,colour=species)) + geom_line() + geom_point() 
 area_stand_plot_raw <- area_stand_plot_raw + facet_grid(nutrients ~ treatment)
 area_stand_plot_raw <- area_stand_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_stand_plot_raw <- area_stand_plot_raw + ylab("current area / initial area")
 area_stand_plot_raw 
 
 #######################################
@@ -99,7 +103,7 @@ rgr_plot_avg
 ####################################
 # Plot mean rgr_stand through time #
 ####################################
-# this response variable may be DUMB
+# this response variable may be DUMB 
 # why should I divided RGR by density on previous time step??? 
 
 # black & white 
@@ -236,7 +240,7 @@ avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment)
 avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
 avgrgr_plot <- avgrgr_plot + ylab("average RGR")
 avgrgr_plot <- avgrgr_plot + scale_fill_grey() 
-avgrgr_plot
+avgrgr_plot 
 
 # colour
 limits <- aes(ymax = average_RGR + se, ymin= average_RGR - se)
