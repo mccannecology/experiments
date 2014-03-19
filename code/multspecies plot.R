@@ -167,6 +167,23 @@ area_stand_plot_avg <- area_stand_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8
 area_stand_plot_avg <- area_stand_plot_avg + ylab("current area / initial area")
 area_stand_plot_avg
 
+##################################
+# Plot mean area_stand at day 10 #
+# Total species only             #
+##################################
+# subset some data for this plot 
+summary_data_area_stand_10_TOT <- subset(summary_data_area_stand, summary_data_area_stand$day==10 & summary_data_area_stand$species=="TOT")
+
+# black & white 
+# still need to add 
+
+# colour
+area_stand_plot_10 <- ggplot(summary_data_area_stand_10_TOT, aes(x=treatment, y=area_stand,colour=factor(nutrients))) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
+area_stand_plot_10 <- area_stand_plot_10 + geom_point()
+area_stand_plot_10 <- area_stand_plot_10 + ylab("final area / initial area")
+area_stand_plot_10 <- area_stand_plot_10 + xlab("species treatment")
+area_stand_plot_10
+
 ########################################
 # Plot mean % composition through time #
 ########################################
