@@ -67,6 +67,20 @@ rgr9 <- (log(subset(data_area$area_mm2,data_area$day==10))-log(subset(data_area$
 # combine each day's rgr into a single vector
 rgr <- c(rgr1,rgr3,rgr5,rgr7,rgr9)
 
+# total area of a well plate
+diameter <- 35 
+wellarea <- pi*(diameter/2)^2
+
+# calculate density-standarized rgr 
+rgr1_stand <- (log(subset(data_area$area_mm2,data_area$day==2))-log(subset(data_area$area_mm2,data_area$day==0)))/2/(subset(data_area$area_mm2,data_area$day==0)/wellarea)
+rgr3_stand <- (log(subset(data_area$area_mm2,data_area$day==4))-log(subset(data_area$area_mm2,data_area$day==2)))/2/(subset(data_area$area_mm2,data_area$day==2)/wellarea)
+rgr5_stand <- (log(subset(data_area$area_mm2,data_area$day==6))-log(subset(data_area$area_mm2,data_area$day==4)))/2/(subset(data_area$area_mm2,data_area$day==4)/wellarea)
+rgr7_stand <- (log(subset(data_area$area_mm2,data_area$day==8))-log(subset(data_area$area_mm2,data_area$day==6)))/2/(subset(data_area$area_mm2,data_area$day==6)/wellarea)
+rgr9_stand <- (log(subset(data_area$area_mm2,data_area$day==10))-log(subset(data_area$area_mm2,data_area$day==8)))/2/(subset(data_area$area_mm2,data_area$day==8)/wellarea)
+
+# combine each day's density-standarized rgr into a single vector
+rgr_stand  <- c(rgr1_stand,rgr3_stand,rgr5_stand,rgr7_stand,rgr9_stand)
+
 # set-up the dataframe to hold the rgrs
 data_rgr <- subset(data_area, data_area$day != 10) # exclude day 10
 data_rgr$day <- data_rgr$day+1 # add one to day so it corresponds to the midpoint for RGR calculations 
@@ -74,11 +88,12 @@ data_rgr <- data_rgr[-10] # get rid of columns you don't need
 data_rgr <- data_rgr[-9]
 data_rgr <- data_rgr[-8]
 
-# add the rgr vector the the data frame 
+# add the rgr and rgr_stand vectors the the data frame 
 data_rgr$rgr <- rgr
+data_rgr$rgr_stand <- rgr_stand
 
 # cleanup your environment
-rm(list = c("rgr","rgr1","rgr3","rgr5","rgr7","rgr9"))
+rm(list = c("rgr","rgr1","rgr3","rgr5","rgr7","rgr9","rgr_stand","rgr1_stand","rgr3_stand","rgr5_stand","rgr7_stand","rgr9_stand","diameter","wellarea"))
 
 # add a second id that is specific to a species in the well 
 data_area$id2 <- paste(data_area$id,data_area$species,sep="")
@@ -145,5 +160,10 @@ summary_data_maxrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","spec
                              se = sd / sqrt(N) )
 colnames(summary_data_maxrgr)[5] <- "maximum_RGR"
 
-
-
+# Relative growth rate - standardized by density
+summary_data_rgr_stand <- ddply(data_rgr, c("nutrients","treatment","species","day"), summarise, 
+                          N = length(rgr_stand),
+                          mean = mean(rgr_stand),
+                          sd = sd(rgr_stand),
+                          se = sd / sqrt(N) )
+colnames(summary_data_rgr)[6] <- "rgr_stand"
