@@ -187,3 +187,15 @@ summary_data_rgr_stand <- ddply(data_rgr, c("nutrients","treatment","species","d
                           sd = sd(rgr_stand),
                           se = sd / sqrt(N) )
 colnames(summary_data_rgr_stand)[6] <- "rgr_stand"
+
+# average the Relative growth rate - standardized by density
+summary_data_avg_rgr_stand <- ddply(summary_data_rgr_stand, c("nutrients","treatment","species"), summarise, 
+                                N = length(rgr_stand),
+                                mean = mean(rgr_stand),
+                                sd = sd(rgr_stand),
+                                se = sd / sqrt(N) )
+colnames(summary_data_avg_rgr_stand)[5] <- "rgr_stand"
+
+
+
+
