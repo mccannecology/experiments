@@ -133,6 +133,9 @@ rgr_stand_plot_avg
 ###############################
 # Plot mean area through time #
 ###############################
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_area$treatment <- factor(summary_data_area$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
 # black & white 
 area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,shape=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
 area_plot_avg <- area_plot_avg + geom_line() + geom_point(size=3)
@@ -157,19 +160,40 @@ area_plot_avg <- area_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=
 area_plot_avg <- area_plot_avg + ylab("area (sq. mm)")
 area_plot_avg
 
+# flip the faceting 
+# now scale free doesn't work 
+area_plot_avg <- ggplot(summary_data_area, aes(x=day, y=area,colour=species)) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
+area_plot_avg <- area_plot_avg + geom_line() + geom_point()
+area_plot_avg <- area_plot_avg + facet_grid(treatment ~ nutrients, scales="free")
+area_plot_avg <- area_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
+area_plot_avg <- area_plot_avg + ylab("area (sq. mm)")
+area_plot_avg
+
+
 #####################################
 # Plot mean area_stand through time #
+# total species only                #
 #####################################
-# black & white 
-# still need to add 
+# area_stand for each speicies is done wrong 
+# I dividied by each species' initial area 
+# I should have divied by the total initial plant area in the well
+
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_area_stand$treatment <- factor(summary_data_area_stand$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
+# subset some data for this plot 
+summary_data_area_stand_TOT <- subset(summary_data_area_stand, summary_data_area_stand$species=="TOT")
 
 # colour
-area_stand_plot_avg <- ggplot(summary_data_area_stand, aes(x=day, y=area_stand,colour=species)) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
+area_stand_plot_avg <- ggplot(summary_data_area_stand_TOT, aes(x=day, y=area_stand)) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
 area_stand_plot_avg <- area_stand_plot_avg + geom_line() + geom_point()
-area_stand_plot_avg <- area_stand_plot_avg + facet_grid(nutrients ~ treatment)
+area_stand_plot_avg <- area_stand_plot_avg + facet_grid(nutrients ~ treatment, scales="free_y")
 area_stand_plot_avg <- area_stand_plot_avg + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
 area_stand_plot_avg <- area_stand_plot_avg + ylab("current area / initial area")
 area_stand_plot_avg
+
+# black & white 
+# still need to add 
 
 ##################################
 # Plot mean area_stand at day 10 #
@@ -178,15 +202,41 @@ area_stand_plot_avg
 # subset some data for this plot 
 summary_data_area_stand_10_TOT <- subset(summary_data_area_stand, summary_data_area_stand$day==10 & summary_data_area_stand$species=="TOT")
 
-# black & white 
-# still need to add 
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_area_stand_10_TOT$treatment <- factor(summary_data_area_stand_10_TOT$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
 
 # colour
 area_stand_plot_10 <- ggplot(summary_data_area_stand_10_TOT, aes(x=treatment, y=area_stand,colour=factor(nutrients))) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
-area_stand_plot_10 <- area_stand_plot_10 + geom_point()
+area_stand_plot_10 <- area_stand_plot_10 + geom_point(size=3)
 area_stand_plot_10 <- area_stand_plot_10 + ylab("final area / initial area")
 area_stand_plot_10 <- area_stand_plot_10 + xlab("species treatment")
+area_stand_plot_10 <- area_stand_plot_10 + labs(colour="Nutrients")
 area_stand_plot_10
+
+# black & white 
+# still need to add 
+
+
+##################################
+# Plot mean area at day 10       #
+# Total species only             #
+##################################
+# subset some data for this plot 
+summary_data_area_10_TOT <- subset(summary_data_area, summary_data_area$day==10 & summary_data_area$species=="TOT")
+
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_area_10_TOT$treatment <- factor(summary_data_area_10_TOT$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
+# colour
+area_plot_10 <- ggplot(summary_data_area_10_TOT, aes(x=treatment, y=area,colour=factor(nutrients))) + geom_errorbar(aes(ymin=area-se, ymax=area+se), width=0.1)
+area_plot_10 <- area_plot_10 + geom_point(size=3)
+area_plot_10 <- area_plot_10 + ylab("final area (sq. mm)")
+area_plot_10 <- area_plot_10 + xlab("species treatment")
+area_plot_10 <- area_plot_10 + labs(colour="Nutrients")
+area_plot_10
+
+# black & white 
+# still need to add 
 
 
 ##################################
@@ -194,6 +244,9 @@ area_stand_plot_10
 # Bar plot                       #
 # each species stacked           #
 ##################################
+# This plot tells me that I calculated area_stand for each species incorrectly
+# in polyculture treatments the areas should be standardized by the total initial area of all specie in the well, not just that specific species
+
 # subset some data for this plot 
 summary_data_area_stand_10_noTOT <- subset(summary_data_area_stand, summary_data_area_stand$day==10 & summary_data_area_stand$species !="TOT")
 
