@@ -251,6 +251,21 @@ avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, po
 avgrgr_plot <- avgrgr_plot + ylab("average RGR")
 avgrgr_plot
 
+#####################################################################
+# Plot standardized average growth rate - by species - by treatment #
+#####################################################################
+# this response variable may be DUMB 
+# why should I divided RGR by density on previous time step??? 
+
+limits <- aes(ymax = rgr_stand + se, ymin= rgr_stand - se)
+dodge <- position_dodge(width=0.9)
+avgrgr_stand_plot <- ggplot(subset(summary_data_avg_rgr_stand, summary_data_avg_rgr_stand$species != "TOT"), aes(x=species, y=rgr_stand, fill=species)) 
+avgrgr_stand_plot <- avgrgr_stand_plot + geom_bar(position="dodge",stat="identity")
+avgrgr_stand_plot <- avgrgr_stand_plot + facet_grid(nutrients ~ treatment)
+avgrgr_stand_plot <- avgrgr_stand_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_stand_plot <- avgrgr_stand_plot + ylab("standardized RGR")
+avgrgr_stand_plot
+
 ##################################
 # Plot species area on each axis #
 ##################################
