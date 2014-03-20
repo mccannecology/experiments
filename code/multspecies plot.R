@@ -188,6 +188,27 @@ area_stand_plot_10 <- area_stand_plot_10 + ylab("final area / initial area")
 area_stand_plot_10 <- area_stand_plot_10 + xlab("species treatment")
 area_stand_plot_10
 
+
+##################################
+# Plot mean area_stand at day 10 #
+# Bar plot                       #
+# each species stacked           #
+##################################
+# subset some data for this plot 
+summary_data_area_stand_10_noTOT <- subset(summary_data_area_stand, summary_data_area_stand$day==10 & summary_data_area_stand$species !="TOT")
+
+# black & white 
+# still need to add a B&W version 
+
+# colour - error bars come out in weird locations (where the bar originally would have been before stacking)
+limits <- aes(ymax = area_stand + se, ymin= area_stand - se)
+area_stand_plot_10_species <- ggplot(summary_data_area_stand_10_noTOT, aes(x=treatment, y=area_stand, fill=species)) + geom_bar(stat="identity")
+area_stand_plot_10_species <- area_stand_plot_10_species + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
+area_stand_plot_10_species <- area_stand_plot_10_species + facet_grid(nutrients~.)
+area_stand_plot_10_species <- area_stand_plot_10_species + ylab("final area / initial area")
+area_stand_plot_10_species <- area_stand_plot_10_species + xlab("species treatment")
+area_stand_plot_10_species
+
 ########################################
 # Plot mean % composition through time #
 ########################################
