@@ -46,6 +46,32 @@ significant <- subset(posthoc_anova_area_stand_10_TOT, posthoc_anova_area_stand_
 nonsignif <- subset(posthoc_anova_area_stand_10_TOT, posthoc_anova_area_stand_10_TOT[,4]>0.050) # non-significant comparisons 
 
 ##############################
+# Two-way ancova             #
+# Y = total area             #
+# Covariate: initial area    #
+# Nutrients * sp. treatment  #
+##############################
+# create a dataframe that has both area_0 and area_10 as a column (variable)
+# I am goign to add this column to data_area_10
+data_area_10$area_0 <- subset(data_area$area_mm2, data_area$day==0)
+data_area_10_TOT <- subset(data_area_10, data_area_10$species == "TOT")
+colnames(data_area_10_TOT)[8]<-"area_10"
+
+# visualize the relationship between initial area (day 0) and final area (day 10) 
+# low nutrients
+plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="low"), subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="low"))
+# high nutrients
+plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="high"), subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="high"))
+
+# do the ANCOVA 
+ancova_area_10_TOT <- aov(area_10 ~ nutrients*treatment+area_0, data=data_area_10_TOT)
+summary(ancova_area_10_TOT)
+posthoc_ancova_area_10_TOT <- TukeyHSD(ancova_area_10_TOT)
+posthoc_ancova_area_10_TOT <- posthoc_ancova_area_10_TOT$'nutrients:treatment'
+significant <- subset(posthoc_ancova_area_10_TOT, posthoc_ancova_area_10_TOT[,4]<=0.050) # significant comparisons 
+nonsignif <- subset(posthoc_ancova_area_10_TOT, posthoc_ancova_area_10_TOT[,4]>0.050) # non-significant comparisons 
+
+##############################
 # Two-way anova              #
 # Y= max RGR                 #
 # Lemna                      #
@@ -102,10 +128,19 @@ summary(anova_rgr_max_SP)
 anova_rgr_mean_SP <- aov(mean ~ nutrients * treatment, data=data_rgr_SP)
 summary(anova_rgr_mean_SP)
 
+##############################
+# Permutation ANOVA          # 
+# Y = area_stand_10          #
+# Nutrients * sp. treatment  #
+##############################
+library(vegan)
+# This works, but I'm not sure if it's right 
+# I had to make the response variable Y multivariate, so I used area_10 and area_0
+adonis(cbind(data_area_10_TOT$area_0,data_area_10_TOT$area_10) ~ nutrients + treatment, data = data_area_10_TOT, permutations =999)
+
 
 
 # Response: Relative growth rates 
 # Is the average density-specific RGR different different between species?  
-
 
 
