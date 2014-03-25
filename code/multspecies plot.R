@@ -284,11 +284,14 @@ comp_rel_plot
 #################################################################
 # Plot average maximum growth rate - by species - by treamtment #
 #################################################################
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_maxrgr$treatment <- factor(summary_data_maxrgr$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
 # black & white 
 limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
 dodge <- position_dodge(width=0.9)
 maxrgr_plot <- ggplot(summary_data_maxrgr, aes(x=species, y=maximum_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
-maxrgr_plot <- maxrgr_plot + facet_grid(nutrients ~ treatment)
+maxrgr_plot <- maxrgr_plot + facet_grid(nutrients ~ treatment, scales="free_y")
 maxrgr_plot <- maxrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
 maxrgr_plot <- maxrgr_plot + ylab("maximum RGR")
 maxrgr_plot <- maxrgr_plot + scale_fill_grey()
@@ -303,14 +306,47 @@ maxrgr_plot <- maxrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, po
 maxrgr_plot <- maxrgr_plot + ylab("maximum RGR")
 maxrgr_plot
 
+
+### make low & high nutrient plots separately, then arrange (this will make plots look nicer)
+# just high nutrients 
+limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
+dodge <- position_dodge(width=0.9)
+maxrgr_plot_high <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$nutrients=="high"), aes(x=species, y=maximum_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+maxrgr_plot_high <- maxrgr_plot_high + facet_grid(. ~ treatment)
+maxrgr_plot_high <- maxrgr_plot_high + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot_high <- maxrgr_plot_high + ylab("maximum RGR")
+maxrgr_plot_high <- maxrgr_plot_high + scale_fill_grey()
+maxrgr_plot_high <- maxrgr_plot_high + theme_bw()
+maxrgr_plot_high <- maxrgr_plot_high + theme(legend.position = "none") 
+maxrgr_plot_high
+
+# just low nutrients 
+limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
+dodge <- position_dodge(width=0.9)
+maxrgr_plot_low <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$nutrients=="low"), aes(x=species, y=maximum_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+maxrgr_plot_low <- maxrgr_plot_low  + facet_grid(. ~ treatment)
+maxrgr_plot_low <- maxrgr_plot_low + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot_low <- maxrgr_plot_low + ylab("maximum RGR")
+maxrgr_plot_low <- maxrgr_plot_low + scale_fill_grey()
+maxrgr_plot_low <- maxrgr_plot_low + theme_bw()
+maxrgr_plot_low <- maxrgr_plot_low + theme(legend.position = "none") 
+maxrgr_plot_low
+
+# combine thwo plots into one
+Fig3temp <- arrangeGrob(maxrgr_plot_high,maxrgr_plot_low,ncol=1,nrow=2) 
+Fig3temp
+
 ################################################################
 # Plot average average growth rate - by species - by treatment #
 ################################################################
+# re-order my treatments so they go from monocultures to polycultures in alphabetical order 
+summary_data_meanrgr$treatment <- factor(summary_data_meanrgr$treatment, levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
 # black & white 
 limits <- aes(ymax = average_RGR + se, ymin= average_RGR - se)
 dodge <- position_dodge(width=0.9)
 avgrgr_plot <- ggplot(summary_data_meanrgr, aes(x=species, y=average_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
-avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment)
+avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment, scales="free_y")
 avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
 avgrgr_plot <- avgrgr_plot + ylab("average RGR")
 avgrgr_plot <- avgrgr_plot + scale_fill_grey() 
@@ -324,6 +360,35 @@ avgrgr_plot <- avgrgr_plot + facet_grid(nutrients ~ treatment)
 avgrgr_plot <- avgrgr_plot + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
 avgrgr_plot <- avgrgr_plot + ylab("average RGR")
 avgrgr_plot
+
+### make low & high nutrient plots separately, then arrange (this will make plots look nicer)
+# just high nutrients 
+limits <- aes(ymax = average_RGR + se, ymin = average_RGR - se)
+dodge <- position_dodge(width=0.9)
+avgrgr_plot_high <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$nutrients=="high"), aes(x=species, y=average_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+avgrgr_plot_high <- avgrgr_plot_high + facet_grid(. ~ treatment)
+avgrgr_plot_high <- avgrgr_plot_high + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot_high <- avgrgr_plot_high + ylab("average RGR")
+avgrgr_plot_high <- avgrgr_plot_high + scale_fill_grey()
+avgrgr_plot_high <- avgrgr_plot_high + theme_bw()
+avgrgr_plot_high <- avgrgr_plot_high + theme(legend.position = "none") 
+avgrgr_plot_high 
+
+# just low nutrients 
+limits <- aes(ymax = average_RGR + se, ymin = average_RGR - se)
+dodge <- position_dodge(width=0.9)
+avgrgr_plot_low <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$nutrients=="low"), aes(x=species, y=average_RGR, fill=species)) + geom_bar(position="dodge",stat="identity")
+avgrgr_plot_low <- avgrgr_plot_low  + facet_grid(. ~ treatment)
+avgrgr_plot_low <- avgrgr_plot_low + geom_bar(position=dodge) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot_low <- avgrgr_plot_low + ylab("average RGR")
+avgrgr_plot_low <- avgrgr_plot_low + scale_fill_grey()
+avgrgr_plot_low <- avgrgr_plot_low + theme_bw()
+avgrgr_plot_low <- avgrgr_plot_low + theme(legend.position = "none") 
+avgrgr_plot_low
+
+# combine thwo plots into one
+Fig2temp <- arrangeGrob(avgrgr_plot_high,avgrgr_plot_low,ncol=1,nrow=2) 
+Fig2temp
 
 #####################################################################
 # Plot standardized average growth rate - by species - by treatment #
