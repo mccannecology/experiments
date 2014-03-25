@@ -26,6 +26,24 @@ plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="low"), subset(
 # high nutrients
 plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="high"), subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="high"))
 
+# BUT this relationship does not appear to be similar in each treatment combination!
+
+# regress each treatment combination 
+nutrients<-c("low","high")
+treatment<-c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB")
+
+for (i in 1:length(nutrients)){
+  for (j in 1:length(treatment)){    
+    plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]), 
+         subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]),
+         main=paste(nutrients[i],treatment[j]),
+         ylab = "area day 10 (sq. mm)",
+         xlab = "area day 0 (sq. mm)")
+  }
+}
+
+
+
 ###############################
 # Test parametric assumptions #
 ###############################
