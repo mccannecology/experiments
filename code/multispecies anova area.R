@@ -165,7 +165,11 @@ data_area_10_TOT["power_area_stand"] <- ((data_area_10_TOT$area_stand)^power - 1
 
 # Bartlett Test of Homogeneity of Variances
 # null hypothesis = population variances are equal 
+# across all treatment combinations 
+bartlett.test(power_area_stand ~ treatment*nutrients, data = data_area_10_TOT)
+# within low nutrients
 bartlett.test(subset(data_area_10_TOT$power_area_stand, data_area_10_TOT$nutrients=="low") ~ subset(data_area_10_TOT$treatment, data_area_10_TOT$nutrients=="low")) # p-value = 0.7878
+# within high nutrients
 bartlett.test(subset(data_area_10_TOT$power_area_stand, data_area_10_TOT$nutrients=="high") ~ subset(data_area_10_TOT$treatment, data_area_10_TOT$nutrients=="high")) # p-value = 0.6287
 
 # re-do-the anova 
@@ -180,11 +184,11 @@ nonsignif <- subset(posthoc_anova_area_stand_TOT_power, posthoc_anova_area_stand
 
 # plot a histogram 
 # looks normal-ish
-hist(resid(anova_area_stand_TOT_power))
+hist(resid(anova_area_stand_TOT_power),xlab="Residuals",main=NULL)
 
 # QQ plot 
 # Does not look very normal 
-qqnorm(resid(anova_area_stand_TOT_power)) 
+qqnorm(resid(anova_area_stand_TOT_power),main=NULL) 
 qqline(resid(anova_area_stand_TOT_power)) 
 
 # null hypothesis = sample came from a normally distributed population 
