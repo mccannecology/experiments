@@ -214,8 +214,13 @@ area_stand_plot_10 <- area_stand_plot_10 + labs(colour="Nutrients")
 area_stand_plot_10
 
 # black & white 
-# still need to add 
-
+area_stand_plot_10 <- ggplot(summary_data_area_stand_10_TOT, aes(x=treatment, y=area_stand,shape=factor(nutrients))) + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
+area_stand_plot_10 <- area_stand_plot_10 + geom_point(size=3)
+area_stand_plot_10 <- area_stand_plot_10 + ylab("Final area / Initial area")
+area_stand_plot_10 <- area_stand_plot_10 + xlab("Species treatment")
+area_stand_plot_10 <- area_stand_plot_10 + theme_classic(base_size=18)
+area_stand_plot_10 <- area_stand_plot_10 + labs(colour="Nutrients")
+area_stand_plot_10
 
 ##################################
 # Plot mean area at day 10       #
