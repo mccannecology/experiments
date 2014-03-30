@@ -19,8 +19,9 @@ head(data_area_10_TOT)
 # Should I use an ANCOVA?  #
 # (as opposed to an ANOVA) #
 ############################
-# Yes, if there appears to  be a relationship between initial and final area 
 # visualize the relationship between initial area (day 0) and final area (day 10) 
+# There appears to  be a relationship between initial and final area 
+
 # low nutrients
 plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="low"), subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="low"))
 # high nutrients
@@ -33,12 +34,17 @@ nutrients<-c("low","high")
 treatment<-c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB")
 
 for (i in 1:length(nutrients)){
-  for (j in 1:length(treatment)){    
-    plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]), 
+  for (j in 1:length(treatment)){       
+    
+    jpeg(paste(i,j,".jpg",sep=""), width = 250, height = 250, units = "px", quality = 100)
+    
+    temp <- plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]), 
          subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]),
          main=paste(nutrients[i],treatment[j]),
          ylab = "area day 10 (sq. mm)",
          xlab = "area day 0 (sq. mm)")
+    
+    dev.off()
   }
 }
 
@@ -119,9 +125,9 @@ bartlett.test(subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="low"
 bartlett.test(subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients=="high") ~ subset(data_area_10_TOT$treatment, data_area_10_TOT$nutrients=="high")) # p-value = 0.001272
 
 
-
-
-# do the ANCOVA 
+#################
+# Do the ANCOVA #
+#################
 ancova_area_10_TOT <- aov(area_10 ~ nutrients*treatment+area_0, data=data_area_10_TOT)
 summary(ancova_area_10_TOT)
 posthoc_ancova_area_10_TOT <- TukeyHSD(ancova_area_10_TOT)
