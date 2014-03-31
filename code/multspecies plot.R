@@ -346,34 +346,33 @@ Fig3temp
 head(summary_data_maxrgr) 
 
 # LEMNA
-limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
-dodge <- position_dodge(width=0.9)
-maxrgr_plot_LM <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"), aes(x=treatment, y=maximum_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot_LM <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
 maxrgr_plot_LM <- maxrgr_plot_LM + geom_point(size=3)
-maxrgr_plot_LM <- maxrgr_plot_LM + facet_grid(. ~ nutrients)
 maxrgr_plot_LM <- maxrgr_plot_LM + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_LM <- maxrgr_plot_LM + ylim(0,0.4)
 maxrgr_plot_LM <- maxrgr_plot_LM + ggtitle("Lemna minor")
+maxrgr_plot_LM <- maxrgr_plot_LM +theme(legend.position = "none") 
 maxrgr_plot_LM 
 
 # SPIRODELA
-limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
-dodge <- position_dodge(width=0.9)
-maxrgr_plot_SP <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"), aes(x=treatment, y=maximum_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot_SP <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
 maxrgr_plot_SP <- maxrgr_plot_SP + geom_point(size=3)
-maxrgr_plot_SP <- maxrgr_plot_SP + facet_grid(. ~ nutrients)
 maxrgr_plot_SP <- maxrgr_plot_SP + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_SP <- maxrgr_plot_SP + ylim(0,0.4)
 maxrgr_plot_SP <- maxrgr_plot_SP + ggtitle("Spirodela polyrhiza")
+maxrgr_plot_SP <- maxrgr_plot_SP + theme(legend.position = "none") 
 maxrgr_plot_SP 
 
 # WOLLFIA
-limits <- aes(ymax = maximum_RGR + se, ymin = maximum_RGR - se)
-dodge <- position_dodge(width=0.9)
-maxrgr_plot_WB <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"), aes(x=treatment, y=maximum_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+maxrgr_plot_WB <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
 maxrgr_plot_WB <- maxrgr_plot_WB + geom_point(size=3)
-maxrgr_plot_WB <- maxrgr_plot_WB + facet_grid(. ~ nutrients)
 maxrgr_plot_WB <- maxrgr_plot_WB + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_WB <- maxrgr_plot_WB + ylim(0,0.4)
 maxrgr_plot_WB <- maxrgr_plot_WB + ggtitle("Wolffia brasiliensis")
 maxrgr_plot_WB 
+
+Fig3temp <- arrangeGrob(maxrgr_plot_LM,maxrgr_plot_SP,maxrgr_plot_WB,ncol=3,nrow=1) 
+Fig3temp
 
 ################################################################
 # Plot average average growth rate - by species - by treatment #
@@ -435,34 +434,34 @@ Fig2temp
 head(summary_data_meanrgr) 
 
 # LEMNA
-limits <- aes(ymax = average_RGR + se, ymin = average_RGR - se)
-dodge <- position_dodge(width=0.9)
-avgrgr_plot_LM <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="LM"), aes(x=treatment, y=average_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot_LM <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="LM"), aes(x=treatment, y=average_RGR, shape=nutrients)) + geom_errorbar(aes(ymin=average_RGR-se, ymax=average_RGR+se), width=0.1)
 avgrgr_plot_LM <- avgrgr_plot_LM + geom_point(size=3)
-avgrgr_plot_LM <- avgrgr_plot_LM + facet_grid(. ~ nutrients)
+avgrgr_plot_LM <- avgrgr_plot_LM + ylim(-0.05,0.25)
 avgrgr_plot_LM <- avgrgr_plot_LM + ylab("average RGR (day 0-10)")
 avgrgr_plot_LM <- avgrgr_plot_LM + ggtitle("Lemna minor")
+avgrgr_plot_LM <- avgrgr_plot_LM + theme(legend.position = "none") 
 avgrgr_plot_LM 
 
 # SPIRODELA
-limits <- aes(ymax = average_RGR + se, ymin = average_RGR - se)
-dodge <- position_dodge(width=0.9)
-avgrgr_plot_SP <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="SP"), aes(x=treatment, y=average_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot_SP <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="SP"), aes(x=treatment, y=average_RGR, shape=nutrients)) + geom_errorbar(aes(ymin=average_RGR-se, ymax=average_RGR+se), width=0.1)
 avgrgr_plot_SP <- avgrgr_plot_SP + geom_point(size=3)
-avgrgr_plot_SP <- avgrgr_plot_SP + facet_grid(. ~ nutrients)
+avgrgr_plot_SP <- avgrgr_plot_SP + ylim(-0.05,0.25)
 avgrgr_plot_SP <- avgrgr_plot_SP + ylab("average RGR (day 0-10)")
 avgrgr_plot_SP <- avgrgr_plot_SP + ggtitle("Spirodela polyrhiza")
+avgrgr_plot_SP <- avgrgr_plot_SP + theme(legend.position = "none") 
 avgrgr_plot_SP 
 
 # WOLLFIA
-limits <- aes(ymax = average_RGR + se, ymin = average_RGR - se)
-dodge <- position_dodge(width=0.9)
-avgrgr_plot_WB <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="WB"), aes(x=treatment, y=average_RGR)) + geom_errorbar(limits, position=dodge, width=0.25)
+avgrgr_plot_WB <- ggplot(subset(summary_data_meanrgr, summary_data_meanrgr$species=="WB"), aes(x=treatment, y=average_RGR, shape=nutrients)) + geom_errorbar(aes(ymin=average_RGR-se, ymax=average_RGR+se), width=0.1)
 avgrgr_plot_WB <- avgrgr_plot_WB + geom_point(size=3)
-avgrgr_plot_WB <- avgrgr_plot_WB + facet_grid(. ~ nutrients)
+avgrgr_plot_WB <- avgrgr_plot_WB + ylim(-0.05,0.25)
 avgrgr_plot_WB <- avgrgr_plot_WB + ylab("average RGR (day 0-10)")
 avgrgr_plot_WB <- avgrgr_plot_WB + ggtitle("Wolffia brasiliensis")
 avgrgr_plot_WB 
+
+# combine thwo plots into one
+Fig2temp <- arrangeGrob(avgrgr_plot_LM,avgrgr_plot_SP,avgrgr_plot_WB,ncol=3,nrow=1) 
+Fig2temp
 
 #####################################################################
 # Plot standardized average growth rate - by species - by treatment #
