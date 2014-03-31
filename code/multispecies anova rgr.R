@@ -124,6 +124,13 @@ posthoc_anova_rgr_avg_LM_outlier <- posthoc_anova_rgr_avg_LM_outlier$'nutrients:
 significant <- subset(posthoc_anova_rgr_avg_LM_outlier, posthoc_anova_rgr_avg_LM_outlier[,4]<=0.050) # significant comparisons 
 nonsignif <- subset(posthoc_anova_rgr_avg_LM_outlier, posthoc_anova_rgr_avg_LM_outlier[,4]>0.050) # non-significant comparisons 
 
+###### NOTE ###### 
+# Now, I have an unbalanced design 
+# Changing the order of the factors SLIGHTLY changes the results 
+summary(aov(mean ~ treatment*nutrients, data=data_rgr_avg_LM_outlier)) # this gives you the SS result for nutrients
+summary(aov(mean ~ nutrients*treatment, data=data_rgr_avg_LM_outlier)) # this gives you the SS result for treatment
+###### NOTE ###### 
+
 # Examine residuals #
 # plot a histogram 
 # looks normal-ish
