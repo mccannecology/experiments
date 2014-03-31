@@ -20,6 +20,19 @@ head(data_area_10_TOT)
 glm_area_10 <- glm(area_10 ~ nutrients + treatment + area_0 + nutrients:treatment, data = data_area_10_TOT)
 summary(glm_area_10)
 
+# Examine residuals #
+# plot a histogram 
+# looks normal-ish
+hist(resid(glm_area_10),xlab="Residuals",main=NULL)
+
+# QQ plot 
+# Does not look very normal 
+qqnorm(resid(glm_area_10),main=NULL) 
+qqline(resid(glm_area_10)) 
+
+# null hypothesis = sample came from a normally distributed population 
+shapiro.test(resid(glm_area_10)) # p-value =1.861e-08 --- definitely not normally distributed residuals 
+
 # get the residuals
 glm_area_10_resids <- resid(glm_area_10)
 
