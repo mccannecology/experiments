@@ -58,8 +58,8 @@ avgrgr_plot_WB
 Fig2temp <- arrangeGrob(avgrgr_plot_LM,avgrgr_plot_SP,avgrgr_plot_WB,ncol=3,nrow=1) 
 Fig2temp
 
-ggsave(file="Figure 02.pdf", Fig2temp, height=8,width=16)
-ggsave(file="Figure 02.png", Fig2temp, height=8,width=16)
+ggsave(file="Figure 02.pdf", Fig2temp, height=6,width=16)
+ggsave(file="Figure 02.png", Fig2temp, height=6,width=16)
 
 
 ################################################################
