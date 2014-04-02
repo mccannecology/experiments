@@ -8,6 +8,55 @@
 library(ggplot2)
 library(gridExtra)
 
+######################################################################################
+# Plot average maximum growth rate - by treamtment - separate plots for each species #
+######################################################################################
+head(summary_data_maxrgr) 
+
+# add post-hoc test labels to data frame (summary_data_maxrgr) for plotting posthoc test labels
+# import posthoc label data 
+rgr_max_posthoc <- read.csv("rgr_max_posthoc.csv") 
+# sort both data frames first
+summary_data_maxrgr <- summary_data_maxrgr[order(summary_data_maxrgr$maximum_RGR),]
+rgr_max_posthoc <- rgr_max_posthoc[order(rgr_max_posthoc$maximum_RGR),]
+# add the labels column
+summary_data_maxrgr$label <- rgr_max_posthoc$label
+
+# LEMNA
+maxrgr_plot_LM <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
+maxrgr_plot_LM <- maxrgr_plot_LM + geom_point(size=3)
+maxrgr_plot_LM <- maxrgr_plot_LM + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_LM <- maxrgr_plot_LM + ylim(0,0.4)
+maxrgr_plot_LM <- maxrgr_plot_LM + ggtitle("Lemna minor")
+maxrgr_plot_LM <- maxrgr_plot_LM + theme_classic(base_size=18)
+maxrgr_plot_LM <- maxrgr_plot_LM + theme(legend.position = "none") 
+maxrgr_plot_LM <- maxrgr_plot_LM + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"),aes(x=treatment, y=maximum_RGR+se+0.015,label=label))
+maxrgr_plot_LM
+
+# SPIRODELA
+maxrgr_plot_SP <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
+maxrgr_plot_SP <- maxrgr_plot_SP + geom_point(size=3)
+maxrgr_plot_SP <- maxrgr_plot_SP + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_SP <- maxrgr_plot_SP + ylim(0,0.4)
+maxrgr_plot_SP <- maxrgr_plot_SP + ggtitle("Spirodela polyrhiza")
+maxrgr_plot_SP <- maxrgr_plot_SP + theme_classic(base_size=18)
+maxrgr_plot_SP <- maxrgr_plot_SP + theme(legend.position = "none") 
+maxrgr_plot_SP <- maxrgr_plot_SP + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"),aes(x=treatment, y=maximum_RGR+se+0.015,label=label))
+maxrgr_plot_SP 
+
+# WOLLFIA
+maxrgr_plot_WB <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
+maxrgr_plot_WB <- maxrgr_plot_WB + geom_point(size=3)
+maxrgr_plot_WB <- maxrgr_plot_WB + ylab("maximum RGR (day 0-10)")
+maxrgr_plot_WB <- maxrgr_plot_WB + ylim(0,0.4)
+maxrgr_plot_WB <- maxrgr_plot_WB + ggtitle("Wolffia brasiliensis")
+maxrgr_plot_WB <- maxrgr_plot_WB + theme_classic(base_size=18)
+maxrgr_plot_WB <- maxrgr_plot_WB + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"),aes(x=treatment, y=maximum_RGR+se+0.015,label=label))
+maxrgr_plot_WB 
+
+Fig3temp <- arrangeGrob(maxrgr_plot_LM,maxrgr_plot_SP,maxrgr_plot_WB,ncol=3,nrow=1) 
+Fig3temp
+
 #################################################################
 # Plot average maximum growth rate - by species - by treamtment #
 #################################################################
@@ -59,54 +108,6 @@ maxrgr_plot_low <- maxrgr_plot_low + theme(legend.position = "none")
 maxrgr_plot_low
 
 # combine thwo plots into one
-Fig3temp <- arrangeGrob(maxrgr_plot_high,maxrgr_plot_low,ncol=1,nrow=2) 
-Fig3temp
+Fig3alt <- arrangeGrob(maxrgr_plot_high,maxrgr_plot_low,ncol=1,nrow=2) 
+Fig3alt
 
-######################################################################################
-# Plot average maximum growth rate - by treamtment - separate plots for each species #
-######################################################################################
-head(summary_data_maxrgr) 
-
-# add post-hoc test labels to data frame (summary_data_maxrgr) for plotting posthoc test labels
-# import posthoc label data 
-rgr_max_posthoc <- read.csv("rgr_max_posthoc.csv") 
-# sort both data frames first
-summary_data_maxrgr <- summary_data_maxrgr[order(summary_data_maxrgr$maximum_RGR),]
-rgr_max_posthoc <- rgr_max_posthoc[order(rgr_max_posthoc$maximum_RGR),]
-# add the labels column
-summary_data_maxrgr$label <- rgr_max_posthoc$label
-
-# LEMNA
-maxrgr_plot_LM <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
-maxrgr_plot_LM <- maxrgr_plot_LM + geom_point(size=3)
-maxrgr_plot_LM <- maxrgr_plot_LM + ylab("maximum RGR (day 0-10)")
-maxrgr_plot_LM <- maxrgr_plot_LM + ylim(0,0.4)
-maxrgr_plot_LM <- maxrgr_plot_LM + ggtitle("Lemna minor")
-maxrgr_plot_LM <- maxrgr_plot_LM + theme_classic()
-maxrgr_plot_LM <- maxrgr_plot_LM + theme(legend.position = "none") 
-maxrgr_plot_LM <- maxrgr_plot_LM + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"),aes(x=treatment, y=maximum_RGR,label=label),hjust=2)
-maxrgr_plot_LM
-
-# SPIRODELA
-maxrgr_plot_SP <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
-maxrgr_plot_SP <- maxrgr_plot_SP + geom_point(size=3)
-maxrgr_plot_SP <- maxrgr_plot_SP + ylab("maximum RGR (day 0-10)")
-maxrgr_plot_SP <- maxrgr_plot_SP + ylim(0,0.4)
-maxrgr_plot_SP <- maxrgr_plot_SP + ggtitle("Spirodela polyrhiza")
-maxrgr_plot_SP <- maxrgr_plot_SP + theme_classic()
-maxrgr_plot_SP <- maxrgr_plot_SP + theme(legend.position = "none") 
-maxrgr_plot_SP <- maxrgr_plot_SP + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"),aes(x=treatment, y=maximum_RGR,label=label),hjust=2)
-maxrgr_plot_SP 
-
-# WOLLFIA
-maxrgr_plot_WB <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
-maxrgr_plot_WB <- maxrgr_plot_WB + geom_point(size=3)
-maxrgr_plot_WB <- maxrgr_plot_WB + ylab("maximum RGR (day 0-10)")
-maxrgr_plot_WB <- maxrgr_plot_WB + ylim(0,0.4)
-maxrgr_plot_WB <- maxrgr_plot_WB + ggtitle("Wolffia brasiliensis")
-maxrgr_plot_WB <- maxrgr_plot_WB + theme_classic()
-maxrgr_plot_WB <- maxrgr_plot_WB + geom_text(data=subset(summary_data_maxrgr, summary_data_maxrgr$species=="WB"),aes(x=treatment, y=maximum_RGR,label=label),hjust=2)
-maxrgr_plot_WB 
-
-Fig3temp <- arrangeGrob(maxrgr_plot_LM,maxrgr_plot_SP,maxrgr_plot_WB,ncol=3,nrow=1) 
-Fig3temp

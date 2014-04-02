@@ -33,7 +33,6 @@ area_stand_plot_10 <- area_stand_plot_10 + geom_point(size=3)
 area_stand_plot_10 <- area_stand_plot_10 + ylab("final area / initial area")
 area_stand_plot_10 <- area_stand_plot_10 + xlab("species treatment")
 area_stand_plot_10 <- area_stand_plot_10 + labs(colour="Nutrients")
-area_stand_plot_10 <- area_stand_plot_10 + geom_text(data=summary_data_area_stand_10_TOT,aes(x=treatment, y=area_stand,label=label),hjust=2)
 area_stand_plot_10 <- area_stand_plot_10 + geom_text(data=summary_data_area_stand_10_TOT,aes(x=treatment, y=area_stand+se+0.5,label=label))
 area_stand_plot_10
 
