@@ -345,14 +345,18 @@ Fig3temp
 ######################################################################################
 head(summary_data_maxrgr) 
 
+# add post-hoc test labels to data frame (summary_data_maxrgr) for plotting posthoc test labels
+
+
 # LEMNA
 maxrgr_plot_LM <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="LM"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
 maxrgr_plot_LM <- maxrgr_plot_LM + geom_point(size=3)
 maxrgr_plot_LM <- maxrgr_plot_LM + ylab("maximum RGR (day 0-10)")
 maxrgr_plot_LM <- maxrgr_plot_LM + ylim(0,0.4)
 maxrgr_plot_LM <- maxrgr_plot_LM + ggtitle("Lemna minor")
-maxrgr_plot_LM <- maxrgr_plot_LM +theme(legend.position = "none") 
-maxrgr_plot_LM 
+maxrgr_plot_LM <- maxrgr_plot_LM + theme_classic()
+maxrgr_plot_LM <- maxrgr_plot_LM + theme(legend.position = "none") 
+maxrgr_plot_LM
 
 # SPIRODELA
 maxrgr_plot_SP <- ggplot(subset(summary_data_maxrgr, summary_data_maxrgr$species=="SP"), aes(x=treatment, y=maximum_RGR,shape=nutrients)) + geom_errorbar(aes(ymin=maximum_RGR-se, ymax=maximum_RGR+se), width=0.1)
@@ -360,6 +364,7 @@ maxrgr_plot_SP <- maxrgr_plot_SP + geom_point(size=3)
 maxrgr_plot_SP <- maxrgr_plot_SP + ylab("maximum RGR (day 0-10)")
 maxrgr_plot_SP <- maxrgr_plot_SP + ylim(0,0.4)
 maxrgr_plot_SP <- maxrgr_plot_SP + ggtitle("Spirodela polyrhiza")
+maxrgr_plot_SP <- maxrgr_plot_SP + theme_classic()
 maxrgr_plot_SP <- maxrgr_plot_SP + theme(legend.position = "none") 
 maxrgr_plot_SP 
 
@@ -369,6 +374,7 @@ maxrgr_plot_WB <- maxrgr_plot_WB + geom_point(size=3)
 maxrgr_plot_WB <- maxrgr_plot_WB + ylab("maximum RGR (day 0-10)")
 maxrgr_plot_WB <- maxrgr_plot_WB + ylim(0,0.4)
 maxrgr_plot_WB <- maxrgr_plot_WB + ggtitle("Wolffia brasiliensis")
+maxrgr_plot_WB <- maxrgr_plot_WB + theme_classic()
 maxrgr_plot_WB 
 
 Fig3temp <- arrangeGrob(maxrgr_plot_LM,maxrgr_plot_SP,maxrgr_plot_WB,ncol=3,nrow=1) 
