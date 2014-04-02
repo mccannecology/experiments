@@ -57,6 +57,9 @@ maxrgr_plot_WB
 Fig3temp <- arrangeGrob(maxrgr_plot_LM,maxrgr_plot_SP,maxrgr_plot_WB,ncol=3,nrow=1) 
 Fig3temp
 
+ggsave(file="Figure 03.pdf", Fig3temp, height=8,width=16)
+ggsave(file="Figure 03.png", Fig3temp, height=8,width=16)
+
 #################################################################
 # Plot average maximum growth rate - by species - by treamtment #
 #################################################################
