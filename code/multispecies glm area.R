@@ -4,6 +4,7 @@
 # Covariate: total area day 0 #
 # Nutrients * sp. treatment   #
 ###############################
+library(multcomp)
 
 # I'm not sure how to interpret these results 
 # Instead of an effect of nutrients, species treatment, and area_0
@@ -19,6 +20,19 @@ head(data_area_10_TOT)
 # glm, Y=area_10 
 glm_area_10 <- glm(area_10 ~ nutrients + treatment + area_0 + nutrients:treatment, data = data_area_10_TOT)
 summary(glm_area_10)
+
+# multiple comparisons 
+# this does not do it for interactions 
+glht(glm_area_10, mcp(treatment="Tukey"))
+summary(glht(glm_area_10, mcp(treatment="Tukey")))
+
+# trying to do it for interactions 
+# it doesn't look like I have an significant interaction term, so this might not be necessary
+# following: http://cran.r-project.org/web/packages/multcomp/vignettes/multcomp-examples.pdf
+tmp <- expand.grid(nutrients = unique(data_area_10_TOT$nutrients), treatment = unique(data_area_10_TOT$treatment))
+X <- model.matrix(~ nutrients * treatment, data = tmp)
+glht(glm_area_10, linfct = X)
+# Error in glht.matrix(glm_area_10, linfct = X) : ‘ncol(linfct)’ is not equal to ‘length(coef(model))’
 
 # Examine residuals #
 # plot a histogram 
