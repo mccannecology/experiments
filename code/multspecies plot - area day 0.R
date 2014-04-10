@@ -46,4 +46,4 @@ area_plot_0 <- area_plot_0 + theme_classic(base_size=18)
 area_plot_0
 
 ggsave(file="area_plot_0.pdf", area_plot_0, height=8,width=11)
-ggsave(file="area_plot_0.png", area_plot_0, height=8,width=11)
+ggsave(file="area_plot_0.jpg", area_plot_0, height=8,width=11)
