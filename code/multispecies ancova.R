@@ -166,3 +166,29 @@ posthoc_ancova_area_10_TOT <- TukeyHSD(ancova_area_10_TOT)
 posthoc_ancova_area_10_TOT <- posthoc_ancova_area_10_TOT$'nutrients:treatment'
 significant <- subset(posthoc_ancova_area_10_TOT, posthoc_ancova_area_10_TOT[,4]<=0.050) # significant comparisons 
 nonsignif <- subset(posthoc_ancova_area_10_TOT, posthoc_ancova_area_10_TOT[,4]>0.050) # non-significant comparisons 
+
+
+
+
+
+# Examine residuals #
+# plot a histogram 
+# looks normal-ish
+hist(resid(ancova_area_10_TOT),xlab="Residuals",main=NULL)
+
+# QQ plot 
+# Does not look very normal 
+qqnorm(resid(ancova_area_10_TOT),main=NULL) 
+qqline(resid(ancova_area_10_TOT)) 
+
+# null hypothesis = sample came from a normally distributed population 
+shapiro.test(resid(ancova_area_10_TOT)) # p-value =1.861e-08 --- definitely not normally distributed residuals 
+
+# get the residuals
+ancova_area_10_resids <- resid(ancova_area_10_TOT)
+
+# plot the residulas against observed values 
+plot(ancova_area_10_TOT$area_10, ancova_area_10_resids, xlab="Area day 10", ylab="Residuals")
+
+
+
