@@ -29,10 +29,17 @@ plot(subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients=="high"), subset
 
 # BUT this relationship does not appear to be similar in each treatment combination!
 
+
+library(ggplot2)
+area0_area10_regression <- ggplot(data=data_area_10_TOT,aes(x=area_0,y=area_10)) + geom_point(size=3)
+area0_area10_regression <- area0_area10_regression + ylab("area day 10 (sq. mm)") + xlab("area day 0 (sq.mm)")
+area0_area10_regression <- area0_area10_regression + facet_grid(nutrients ~ treatment)                   
+area0_area10_regression <- area0_area10_regression + stat_smooth(method=lm)
+area0_area10_regression
+
 # regress each treatment combination 
 nutrients<-c("low","high")
 treatment<-c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB")
-
 for (i in 1:length(nutrients)){
   for (j in 1:length(treatment)){       
     
@@ -48,6 +55,31 @@ for (i in 1:length(nutrients)){
   }
 }
 
+
+nutrients<-c("low","high")
+treatment<-c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB")
+# calculate the slope (and its SE) for each treatment combination (14 total)
+temp<-matrix(data=rep(0,3*14),nrow=14,ncol=3)
+temp<-as.data.frame(temp)
+colnames(temp)<-c("treatment","slope","SE")
+temp$treatment <- c("low LM","low SP","low WB","low LMSP","low LMWB","low SPWB","low LMSPWB",
+                    "high LM","high SP","high WB","high LMSP","high LMWB","high SPWB","high LMSPWB")
+temp
+
+for (i in 1:length(nutrients)){
+  for (j in 1:length(treatment)){       
+    temp2 <- lm(subset(data_area_10_TOT$area_10, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]) ~ 
+         subset(data_area_10_TOT$area_0, data_area_10_TOT$nutrients==nutrients[i]& data_area_10_TOT$treatment ==  treatment[j]), 
+       data = data_area_10_TOT)    
+    temp$slope[i*j] <- coef(summary(temp2))[2,1]
+    temp$SE[i*j] <- coef(summary(temp2))[2,2]
+  } 
+}
+
+# Still need to do the actual comparison between the two 
+# The standard error of the difference is computed as the square root of the sum of squared standard errors 
+# Dividing the obtained t stat (diff. btwn. slopes) by the standard error equals 0.0065/0.0049 = 1.3. 
+# We therefore have no reason to suspect the slopes to be different, and can proceed with the ANCOVA.
 
 
 ###############################
