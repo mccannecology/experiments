@@ -38,7 +38,7 @@ area_plot_raw
 area_plot_raw <- ggplot(data_area, aes(x=day,y=area_mm2,group=id2,colour=species)) + geom_line() + geom_point() 
 area_plot_raw <- area_plot_raw + facet_grid(nutrients ~ treatment)
 area_plot_raw <- area_plot_raw + scale_x_discrete(breaks=c(0,2,4,6,8,10),labels=c(0,2,4,6,8,10))
-area_plot_raw <- area_plot_raw + ylab("area (sq. mm")
+area_plot_raw <- area_plot_raw + ylab("area (sq. mm)")
 area_plot_raw 
 
 #########################################
