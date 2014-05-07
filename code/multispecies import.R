@@ -1,5 +1,6 @@
 ################################################
 # Analysis of multispecies duckweed experiment #
+# Summer 2013                                  #
 #                                              #
 # Importing data                               #
 # Do all calculations with R                   #
@@ -8,10 +9,16 @@
 library(plyr)
 
 ################################################
+data <- read.csv("multispecies_area_and_total_rgr.csv")
+
 data_area_raw <- read.csv("multispecies_area_raw.csv") # import area data 
 
 # add a new variable that combines plate and well to use as an ID 
 data_area_raw$id <- paste(data_area_raw$plate,data_area_raw$well,sep="")
+
+# add new variables to data frame
+data_area_raw$final_minus_initial <- data_area_raw$TOT10 - data_area_raw$TOT0
+data_area_raw$final_divide_initial <- data_area_raw$TOT10 / data_area_raw$TOT0
 
 # reshape so repeated measures (days) occur as separate rows 
 # new variable headings with be LM, SP, WB, and TOT (areas)
@@ -156,15 +163,61 @@ summary_data_rgr <- ddply(data_rgr, c("nutrients","treatment","species","day"), 
 colnames(summary_data_rgr)[6] <- "rgr"
 
 # Relative growth rate - same as above, but organized by each species in each well and finds the maximum too 
-summary_data_rgr02 <- ddply(data_rgr, c("nutrients","treatment","species","id2"), summarise, 
+summary_data_rgr02 <- ddply(data_rgr, c("nutrients","treatment","species","id2"), 
+                            summarise, 
                             N = length(rgr),
-                            mean = mean(rgr),
-                            max = max(rgr),
+                            avgRGR = mean(rgr),
+                            maxRGR = max(rgr),
                             sd = sd(rgr),
                             se = sd / sqrt(N) )
+summary_data_rgr03 <- subset(summary_data_rgr02, summary_data_rgr02$species == "TOT")
 summary_data_rgr02 <- subset(summary_data_rgr02, summary_data_rgr02$species != "TOT")
 
-# Relative growth rate - takes the mean of the mean growth rates by species in each well 
+
+#######################
+# Mean maxRGR         #
+# Total               #
+# by treatment combo  #
+# Use for plotting    #
+#######################
+# rgr_max
+summary_data_maxRGR <- ddply(summary_data_rgr03, 
+                             c("treatment","nutrients"), 
+                             summarise, 
+                             N = length(maxRGR),
+                             mean = mean(maxRGR),
+                             sd = sd(maxRGR),
+                             se = sd / sqrt(N) )
+colnames(summary_data_maxRGR)[4] <- "maxRGR"
+# re-order my treatments so they go from low to high
+summary_data_maxRGR$nutrients <- factor(summary_data_maxRGR$nutrients , levels=c("low","high"))
+summary_data_maxRGR$treatment <- factor(summary_data_maxRGR$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+head(summary_data_maxRGR)
+
+#######################
+# Mean avgRGR         #
+# Total               #
+# by treatment combo  #
+# Use for plotting    #
+#######################
+# rgr_max
+summary_data_avgRGR <- ddply(summary_data_rgr03, 
+                             c("treatment","nutrients"), 
+                             summarise, 
+                             N = length(avgRGR),
+                             mean = mean(avgRGR),
+                             sd = sd(avgRGR),
+                             se = sd / sqrt(N) )
+colnames(summary_data_avgRGR)[4] <- "avgRGR"
+# re-order my treatments so they go from low to high
+summary_data_avgRGR$nutrients <- factor(summary_data_avgRGR$nutrients , levels=c("low","high"))
+summary_data_avgRGR$treatment <- factor(summary_data_avgRGR$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+head(summary_data_avgRGR)
+
+
+# Relative growth rate 
+# Species-specifc 
+# takes the mean of the mean growth rates by species in each well 
 summary_data_meanrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
                               N = length(mean),
                               mean2 = mean(mean),
@@ -172,7 +225,9 @@ summary_data_meanrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","spe
                               se = sd / sqrt(N) )
 colnames(summary_data_meanrgr)[5] <- "average_RGR"
 
-# Relative growth rate - the mean of the maximum growth rates by species in each well 
+# Relative growth rate 
+# species-specific
+# the mean of the maximum growth rates by species in each well 
 summary_data_maxrgr <- ddply(summary_data_rgr02, c("nutrients","treatment","species"), summarise,
                              N = length(max),
                              max2 = mean(max),
@@ -196,6 +251,45 @@ summary_data_avg_rgr_stand <- ddply(summary_data_rgr_stand, c("nutrients","treat
                                 se = sd / sqrt(N) )
 colnames(summary_data_avg_rgr_stand)[5] <- "rgr_stand"
 
+
+###########################
+# Mean final-initial area #
+# by treatment combo      #
+# Use for plotting        #
+###########################
+# Area
+summary_data_area_final_minus_initial <- ddply(subset(data_area_raw, data_area_raw$treatment != "Blank"), 
+                                               c("nutrients","treatment"), 
+                                               summarise, 
+                                               N = sum(!is.na(final_minus_initial)),
+                                               mean = mean(final_minus_initial,na.rm=T),
+                                               sd = sd(final_minus_initial,na.rm=T),
+                                               se = sd / sqrt(N) )
+colnames(summary_data_area_final_minus_initial)[4] <- "final_minus_initial"
+# re-order my treatments so they go from low to high
+summary_data_area_final_minus_initial$nutrients <- factor(summary_data_area_final_minus_initial$nutrients , levels=c("low","high"))
+summary_data_area_final_minus_initial$treatment <- factor(summary_data_area_final_minus_initial$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+head(summary_data_area_final_minus_initial)
+
+
+###########################
+# Mean final/initial area #
+# by treatment combo      #
+# Use for plotting        #
+###########################
+# Area
+summary_data_area_final_divide_initial <- ddply(subset(data_area_raw, data_area_raw$treatment != "Blank"), 
+                                                c("nutrients","treatment"), 
+                                                summarise, 
+                                                N = sum(!is.na(final_divide_initial)),
+                                                mean = mean(final_divide_initial,na.rm=T),
+                                                sd = sd(final_divide_initial,na.rm=T),
+                                                se = sd / sqrt(N) )
+colnames(summary_data_area_final_divide_initial)[4] <- "final_divide_initial"
+# re-order my treatments so they go from low to high
+summary_data_area_final_divide_initial$nutrients <- factor(summary_data_area_final_divide_initial$nutrients , levels=c("low","high"))
+summary_data_area_final_divide_initial$treatment <- factor(summary_data_area_final_divide_initial$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+head(summary_data_area_final_divide_initial)
 
 
 
