@@ -16,13 +16,20 @@ head(data_area_raw)
 # Mean final / initial area #
 # By each treatment combo   #
 #############################
-mean_area_final_divide_initial_plot <- ggplot(summary_data_area_final_divide_initial, aes(x=treatment, y=final_divide_initial,shape=nutrients)) 
-mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_errorbar(aes(ymin=final_divide_initial-se, ymax=final_divide_initial+se), width=0.1)
+summary_data_finaldivideinitial <- read.csv("area_stand_posthoc.csv")
+summary_data_finaldivideinitial$nutrients <- factor(summary_data_finaldivideinitial$nutrients , levels=c("low","high"))
+summary_data_finaldivideinitial$treatment <- factor(summary_data_finaldivideinitial$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
+
+mean_area_final_divide_initial_plot <- ggplot(summary_data_finaldivideinitial, aes(x=treatment, y=area_stand,shape=nutrients)) 
+mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_point(size=3)
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + ylab("final area / initial area")
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + xlab("species treatment")
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + theme_classic(base_size=18)
+mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_text(data=summary_data_finaldivideinitial,aes(x=treatment, y=area_stand+se+0.5,label=label))
 mean_area_final_divide_initial_plot
+
+ggsave(filename="mean_area_final_divide_initial_plot.jpg",mean_area_final_divide_initial_plot,height=8,width=11)
 
 #####################
 # Preliminary anova #
@@ -42,6 +49,44 @@ qqline(resid(area_final_divide_initial_anova))
 
 # null hypothesis = sample came from a normally distributed population 
 shapiro.test(resid(area_final_divide_initial_anova)) # p-value = 1.908e-06 
+
+# Bartlett test - homogeneity of variances 
+# Null hypothesis: equal variances
+bartlett.test(final_divide_initial ~ treatment*nutrients, data=data_area_raw) # p-value = 0.1065
+
+
+# Power transformation 
+library(car)
+powerTransform(final_divide_initial ~ nutrients*treatment, data=data_area_raw)
+power <- -0.2009824 
+
+# add the power transformation of area_stand
+data_area_raw$power_final_divide_initial <- ((data_area_raw$final_divide_initial)^power - 1) / power 
+
+# re-do-the anova 
+anova_final_divide_initial_power <- aov(power_final_divide_initial ~ nutrients*treatment, data=data_area_raw)
+summary(anova_final_divide_initial_power)
+posthoc_anova_final_divide_initial_power <- TukeyHSD(anova_final_divide_initial_power)
+posthoc_anova_final_divide_initial_power <- posthoc_anova_final_divide_initial_power$'nutrients:treatment'
+significant <- subset(posthoc_anova_final_divide_initial_power, posthoc_anova_final_divide_initial_power[,4]<=0.050) # significant comparisons 
+nonsignif <- subset(posthoc_anova_final_divide_initial_power, posthoc_anova_final_divide_initial_power[,4]>0.050) # non-significant comparisons 
+
+# Examine residuals #
+# plot a histogram 
+# looks normal-ish
+hist(resid(anova_final_divide_initial_power),xlab="Residuals",main=NULL)
+
+# QQ plot 
+# Does not look very normal 
+qqnorm(resid(anova_final_divide_initial_power),main=NULL) 
+qqline(resid(anova_final_divide_initial_power)) 
+
+# null hypothesis = sample came from a normally distributed population 
+shapiro.test(resid(anova_final_divide_initial_power)) # p-value = 0.4453
+
+bartlett.test(power_final_divide_initial ~ nutrients*treatment, data=data_area_raw)
+
+
 
 
 

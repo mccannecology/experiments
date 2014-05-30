@@ -28,6 +28,9 @@ mean_avgRGR_plot <- mean_avgRGR_plot + theme_classic(base_size=18)
 mean_avgRGR_plot <- mean_avgRGR_plot + geom_text(data=summary_data_avgRGR,aes(x=treatment, y=avgRGR+se+0.01,label=label))
 mean_avgRGR_plot 
 
+ggsave(filename="mean_avgRGR_plot.jpg",mean_avgRGR_plot,height=8,width=11)
+
+
 #####################
 # Preliminary anova #
 # Y = avgRGR        #
@@ -56,3 +59,7 @@ qqline(resid(avgRGR_anova))
 
 # null hypothesis = sample came from a normally distributed population 
 shapiro.test(resid(avgRGR_anova)) # p-value = 0.3773 
+
+# Bartlett test - homogeneity of variances 
+# Null hypothesis: equal variances
+bartlett.test(avgRGR ~ treatment*nutrients, data=data) # p-value = 0.9149
