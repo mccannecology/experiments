@@ -23,8 +23,8 @@ summary_data_finaldivideinitial$treatment <- factor(summary_data_finaldivideinit
 mean_area_final_divide_initial_plot <- ggplot(summary_data_finaldivideinitial, aes(x=treatment, y=area_stand,shape=nutrients)) 
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_errorbar(aes(ymin=area_stand-se, ymax=area_stand+se), width=0.1)
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_point(size=3)
-mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + ylab("final area / initial area")
-mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + xlab("species treatment")
+mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + ylab("Final area / Initial area")
+mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + xlab("Species combination")
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + theme_classic(base_size=18)
 mean_area_final_divide_initial_plot <- mean_area_final_divide_initial_plot + geom_text(data=summary_data_finaldivideinitial,aes(x=treatment, y=area_stand+se+0.5,label=label))
 mean_area_final_divide_initial_plot

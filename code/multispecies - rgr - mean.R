@@ -21,9 +21,10 @@ summary_data_avgRGR <- read.csv("avgRGR_posthoc.csv")
 summary_data_avgRGR$nutrients <- factor(summary_data_avgRGR$nutrients , levels=c("low","high"))
 summary_data_avgRGR$treatment <- factor(summary_data_avgRGR$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
 
-mean_avgRGR_plot <- ggplot(summary_data_avgRGR, aes(x=treatment,y=avgRGR,shape=nutrients)) + geom_point() 
+mean_avgRGR_plot <- ggplot(summary_data_avgRGR, aes(x=treatment,y=avgRGR,shape=nutrients)) + geom_point(size=3) 
 mean_avgRGR_plot <- mean_avgRGR_plot + geom_errorbar(aes(ymin=avgRGR-se, ymax=avgRGR+se), width=0.1)
 mean_avgRGR_plot <- mean_avgRGR_plot + ylab("Average RGR (all species combined)")
+mean_avgRGR_plot <- mean_avgRGR_plot + xlab("Species combination")
 mean_avgRGR_plot <- mean_avgRGR_plot + theme_classic(base_size=18)
 mean_avgRGR_plot <- mean_avgRGR_plot + geom_text(data=summary_data_avgRGR,aes(x=treatment, y=avgRGR+se+0.01,label=label))
 mean_avgRGR_plot 

@@ -20,9 +20,10 @@ summary_data_maxRGR <- read.csv("maxRGR_posthoc.csv")
 summary_data_maxRGR$nutrients <- factor(summary_data_maxRGR$nutrients , levels=c("low","high"))
 summary_data_maxRGR$treatment <- factor(summary_data_maxRGR$treatment , levels=c("LM","SP","WB","LMSP","LMWB","SPWB","LMSPWB"))
 
-mean_maxRGR_plot <- ggplot(summary_data_maxRGR, aes(x=treatment,y=maxRGR,shape=nutrients)) + geom_point() 
+mean_maxRGR_plot <- ggplot(summary_data_maxRGR, aes(x=treatment,y=maxRGR,shape=nutrients)) + geom_point(size=3) 
 mean_maxRGR_plot <- mean_maxRGR_plot + geom_errorbar(aes(ymin=maxRGR-se, ymax=maxRGR+se), width=0.1)
 mean_maxRGR_plot <- mean_maxRGR_plot + ylab("Maximum RGR (all species combined)")
+mean_maxRGR_plot <- mean_maxRGR_plot + xlab("Species combination")
 mean_maxRGR_plot <- mean_maxRGR_plot + theme_classic(base_size=18)
 mean_maxRGR_plot <- mean_maxRGR_plot + geom_text(data=summary_data_maxRGR,aes(x=treatment, y=maxRGR+se+0.01,label=label))
 mean_maxRGR_plot 
